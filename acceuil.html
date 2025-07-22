@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HPA Monastir - IVECO, New Holland, CIFA, Heli, Motors Diesel Tunisie | Véhicules & SAV</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Playfair Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        /* Définition des variables de couleur pour un thème prestigieux et moderne */
+        :root {
+            --blue-primary: #0D243F; /* Un bleu nuit profond et élégant */
+            --blue-accent: #3B82F6;  /* Un bleu vif pour les interactions et accents */
+            --red-accent: #C53030;   /* Un rouge plus profond et prestigieux */
+            --text-dark: #111827;    /* Gris très foncé pour une lisibilité optimale */
+            --text-light: #F9FAFB;   /* Blanc cassé pour le texte sur fond sombre */
+            --bg-dark: #111827;      /* Fond noir/très sombre */
+            --bg-light: #F8F9FA;     /* Fond très légèrement grisé pour les sections */
+            --bg-white: #FFFFFF;
+            --border-light: #E5E7EB; /* Bordure discrète */
+        }
+
+        html.panel-open, body.panel-open {
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-white);
+            color: var(--text-dark);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Styles pour les boutons et éléments interactifs */
+        .btn-primary {
+            background-color: var(--blue-accent);
+            color: white;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.25);
+            transform: translateY(0);
+        }
+
+        .btn-primary:hover {
+            background-color: #2563EB;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+        }
+        
+        .btn-header {
+            background-color: var(--blue-primary);
+            color: white;
+            transition: all 0.3s ease-in-out;
+        }
+        
+        .btn-header:hover {
+            background-color: var(--blue-accent);
+        }
+
+        .btn-secondary {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Styles pour le carrousel */
+        .carousel-item { display: none; }
+        .carousel-item.active { display: block; }
+
+        /* Animation d'entrée pour les éléments au défilement */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1s cubic-bezier(0.165, 0.84, 0.44, 1), transform 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Style pour l'en-tête lors du défilement */
+        #main-header {
+            transition: transform 0.4s ease-in-out, background-color 0.3s, box-shadow 0.3s;
+        }
+        
+        .header-hidden {
+            transform: translateY(-100%);
+        }
+
+        .header-scrolled {
+            background-color: rgba(255, 255, 255, 0.95) !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(8px);
+        }
+
+        /* Animations pour la barre de navigation */
+        .nav-link-hover { position: relative; }
+        .nav-link-hover::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 50%; transform: translateX(-50%); background-color: var(--red-accent); transition: width 0.3s ease-in-out; }
+        .nav-link-hover:hover::after { width: 100%; }
+        
+        /* Section des fonctionnalités IVECO */
+        .feature-grid-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .feature-grid-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 35px rgba(0,0,0,0.15);
+        }
+        .feature-grid-card .overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 60%);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+        .feature-grid-card .learn-more-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            transition: all 0.3s ease;
+            align-self: flex-start;
+            margin-top: 1rem;
+        }
+        .feature-grid-card:hover .learn-more-btn {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: var(--text-dark);
+            border-color: transparent;
+        }
+
+        /* Panneau latéral (Slide-in Panel) */
+        #feature-panel-backdrop {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0,0,0,0.5);
+            opacity: 0;
+            visibility: hidden;
+            z-index: 1040;
+            transition: opacity 0.4s ease, visibility 0s 0.4s;
+        }
+        #feature-panel-backdrop.active {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.4s ease, visibility 0s 0s;
+        }
+        #feature-panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            height: 100%;
+            width: 95%;
+            max-width: 600px;
+            background-color: var(--bg-white);
+            z-index: 1050;
+            transform: translateX(100%);
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            display: flex;
+            flex-direction: column;
+        }
+        #feature-panel.active {
+            transform: translateX(0);
+        }
+        #feature-panel-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        #close-panel-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 2rem;
+            color: #9CA3AF;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+        #close-panel-btn:hover {
+            transform: rotate(90deg);
+            color: var(--text-dark);
+        }
+        
+        /* Conteneur vidéo pour conserver le ratio */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* Ratio 16:9 */
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            background: #000;
+            border-radius: 0.75rem; /* Correspond à rounded-xl */
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); /* Correspond à shadow-2xl */
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+
+        /* STYLES POUR LE CHATBOT (inchangés) */
+        #chatbot-toggler { position: fixed; bottom: 2rem; right: 2rem; background-color: var(--blue-primary); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; z-index: 1000; box-shadow: 0 8px 25px rgba(13, 36, 63, 0.4); transition: transform 0.3s ease, background-color 0.3s ease; }
+        #chatbot-toggler:hover { transform: scale(1.1); background-color: var(--blue-accent); }
+        #chatbot-window { position: fixed; bottom: calc(2rem + 70px); right: 2rem; width: 90%; max-width: 400px; height: 70vh; max-height: 600px; background-color: white; border-radius: 1.5rem; box-shadow: 0 10px 40px rgba(0,0,0,0.2); z-index: 1000; display: flex; flex-direction: column; overflow: hidden; transform: translateY(20px) scale(0.95); opacity: 0; visibility: hidden; transition: transform 0.3s ease, opacity 0.3s ease, visibility 0s 0.3s; }
+        #chatbot-window.visible { transform: translateY(0) scale(1); opacity: 1; visibility: visible; transition: transform 0.3s ease, opacity 0.3s ease, visibility 0s 0s; }
+        #chatbot-header { background-color: var(--blue-primary); color: var(--text-light); padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-light); }
+        #chatbot-header h3 { font-size: 1.25rem; font-weight: 700; }
+        #close-chatbot { background: none; border: none; color: white; font-size: 20px; cursor: pointer; opacity: 0.7; transition: opacity 0.2s; }
+        #close-chatbot:hover { opacity: 1; }
+        #chat-messages { flex-grow: 1; padding: 1.5rem; overflow-y: auto; display: flex; flex-direction: column; gap: 1rem; }
+        .chat-message { display: flex; align-items: flex-end; gap: 0.75rem; max-width: 85%; }
+        .chat-message.user { align-self: flex-end; flex-direction: row-reverse; }
+        .message-bubble { padding: 0.75rem 1rem; border-radius: 1.25rem; line-height: 1.5; }
+        .chat-message.user .message-bubble { background-color: var(--blue-accent); color: white; border-bottom-right-radius: 0.25rem; }
+        .chat-message.bot .message-bubble { background-color: #E5E7EB; color: var(--text-dark); border-bottom-left-radius: 0.25rem; }
+        .message-avatar { width: 40px; height: 40px; border-radius: 50%; background-color: var(--border-light); display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--blue-primary); flex-shrink: 0; }
+        #chat-form { display: flex; padding: 1rem; border-top: 1px solid var(--border-light); background-color: #F9FAFB; }
+        #chat-input { flex-grow: 1; border: 1px solid var(--border-light); border-radius: 9999px; padding: 0.75rem 1.25rem; font-size: 1rem; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+        #chat-input:focus { border-color: var(--blue-accent); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
+        #chat-submit { background-color: var(--blue-accent); color: white; border: none; border-radius: 50%; width: 48px; height: 48px; margin-left: 0.75rem; cursor: pointer; font-size: 1.25rem; display: flex; align-items: center; justify-content: center; transition: background-color 0.2s; }
+        #chat-submit:disabled { background-color: #93C5FD; cursor: not-allowed; }
+        .typing-indicator { display: flex; align-items: center; gap: 5px; }
+        .typing-indicator span { width: 8px; height: 8px; background-color: #9CA3AF; border-radius: 50%; animation: bounce 1.4s infinite both; }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1.0); } }
+
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- En-tête (Header) -->
+    <header id="main-header" class="bg-white/80 backdrop-blur-sm py-4 px-6 md:px-12 flex items-center justify-between sticky top-0 z-50">
+        <!-- Logo HPA -->
+        <div class="flex-shrink-0">
+            <a href="#" class="flex items-center space-x-3">
+                <img src="logo.jpg" alt="Logo HPA" class="h-16 w-32 object-contain" onerror="this.onerror=null;this.src='https://placehold.co/128x64/0D243F/ffffff?text=HPA';this.alt='Logo HPA non trouvé';">
+                <span class="text-3xl font-extrabold" style="color: var(--blue-primary);">HPA</span>
+            </a>
+        </div>
+
+        <!-- Navigation Principale (Menu) -->
+        <nav class="hidden lg:flex flex-grow justify-center">
+            <ul class="flex items-center space-x-8 text-lg font-medium text-gray-600">
+                <li><a href="#" class="nav-link-hover hover:text-red-600 transition duration-300">Accueil</a></li>
+                <li><a href="catalogue.html" class="nav-link-hover hover:text-red-600 transition duration-300">Catalogue</a></li>
+                <li><a href="sav.html" class="nav-link-hover hover:text-red-600 transition duration-300">SAV</a></li>
+                <li><a href="#contact-section" class="nav-link-hover hover:text-red-600 transition duration-300">Contact</a></li>
+            </ul>
+        </nav>
+
+        <!-- Espace réservé pour l'équilibre visuel -->
+        <div class="w-40 hidden lg:block"></div>
+    </header>
+
+    <main>
+        <!-- Section Héros (Hero Section) - Carrousel -->
+        <section id="hero-section" class="relative w-full h-[90vh] overflow-hidden">
+            <div id="hero-carousel" class="absolute inset-0">
+                <!-- Slide 1: IVECO -->
+                <div class="carousel-item active absolute inset-0 transition-opacity duration-1000 ease-in-out">
+                    <img src="https://italcar-sa.tn/wp-content/uploads/2024/12/ivecocover2.jpg" alt="Camion IVECO en action" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-4 bg-gradient-to-t from-black/80 to-black/20">
+                        <h1 class="text-4xl sm:text-6xl lg:text-8xl font-extrabold text-white mb-4" style="text-shadow: 3px 3px 15px rgba(0,0,0,0.6);">La Puissance au Service de vos Projets</h1>
+                        <p class="text-xl sm:text-2xl text-white/90 max-w-4xl mb-8">Votre partenaire de confiance pour des véhicules et engins de pointe.</p>
+                        <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6">
+                            <a href="#vehicles-section" class="btn-primary font-bold py-4 px-10 rounded-full text-lg">Découvrir Nos Véhicules</a>
+                            <a href="#contact-section" class="btn-secondary font-semibold py-4 px-10 rounded-full text-lg">Contacter un Expert</a>
+                        </div>
+                    </div>
+                </div>
+                 <!-- Slide 2: New Holland -->
+                <div class="carousel-item absolute inset-0 transition-opacity duration-1000 ease-in-out">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxxPljfONy_E3bIUIl5UB5TsjbjVIwSYgokA&s" alt="Tracteur New Holland moderne" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-4 bg-gradient-to-t from-black/70 to-black/30">
+                        <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white mb-4" style="text-shadow: 2px 2px 10px rgba(0,0,0,0.5);">Solutions Agricoles Innovantes</h1>
+                        <p class="text-xl sm:text-2xl text-white/90 max-w-4xl mb-8">Performance et durabilité avec la gamme New Holland.</p>
+                         <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6">
+                            <a href="#vehicles-section" class="btn-primary font-bold py-4 px-10 rounded-full text-lg">Voir les Tracteurs</a>
+                            <a href="#" class="btn-secondary font-semibold py-4 px-10 rounded-full text-lg">Réserver un Essai</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Slide 3: IVECO eDaily -->
+                <div class="carousel-item absolute inset-0 transition-opacity duration-1000 ease-in-out">
+                    <img src="https://www.iveco.com/au/-/media/IVECOdotcom/Content/Products/E-Daily/version-banner/eDAILY_VAN_alternative.jpg?h=1080&iar=0&w=1920&rev=-1" alt="IVECO eDaily électrique" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-4 bg-gradient-to-t from-black/70 to-black/30">
+                         <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white mb-4" style="text-shadow: 2px 2px 10px rgba(0,0,0,0.5);">L'Avenir du Transport est Électrique</h1>
+                        <p class="text-xl sm:text-2xl text-white/90 max-w-4xl mb-8">Découvrez le nouvel IVECO eDaily, zéro émission, 100% performant.</p>
+                        <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6">
+                            <a href="#features-section" class="btn-primary font-bold py-4 px-10 rounded-full text-lg">En Savoir Plus</a>
+                            <a href="#contact-section" class="btn-secondary font-semibold py-4 px-10 rounded-full text-lg">Nous Contacter</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <!-- Navigation Carrousel -->
+            <button onclick="prevSlide()" class="absolute left-6 top-1/2 -translate-y-1/2 bg-white/20 text-white p-4 rounded-full hover:bg-white/40 focus:outline-none z-10 transition duration-300 transform hover:scale-110"><i class="fas fa-chevron-left fa-lg"></i></button>
+            <button onclick="nextSlide()" class="absolute right-6 top-1/2 -translate-y-1/2 bg-white/20 text-white p-4 rounded-full hover:bg-white/40 focus:outline-none z-10 transition duration-300 transform hover:scale-110"><i class="fas fa-chevron-right fa-lg"></i></button>
+        </section>
+        
+        <!-- SECTION : Notre Histoire (Vidéo) -->
+        <section id="about-us" class="py-24 lg:py-32 bg-white">
+            <div class="container mx-auto px-6">
+                 <!-- Titres centrés au-dessus -->
+                <div class="text-center mb-16 lg:mb-20 reveal">
+                     <h2 class="text-base font-semibold text-red-600 tracking-widest uppercase">Notre Société</h2>
+                     <p class="text-4xl md:text-5xl font-extrabold mt-4" style="color: var(--blue-primary);">L'Excellence et l'Expertise à votre Service</p>
+                </div>
+                <!-- Grille pour vidéo et texte -->
+                <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+                    <!-- Colonne Vidéo -->
+                    <div class="reveal">
+                        <div class="video-container">
+                             <iframe 
+                                src="https://www.youtube.com/embed/_KGjEV7mGrY" 
+                                title="YouTube video player" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                    </div>
+                    <!-- Colonne Texte -->
+                    <div class="reveal" style="transition-delay: 150ms;">
+                        <p class="text-lg text-gray-600 leading-relaxed">
+                            Fondée sur une passion pour la mécanique et un engagement envers le service client, <strong>HPA Monastir</strong> s'est imposée comme un leader dans la distribution de véhicules industriels, agricoles et de construction en Tunisie. En tant que partenaire officiel de marques prestigieuses comme <strong>IVECO, New Holland, CIFA et Heli</strong>, nous garantissons non seulement des produits de première qualité, mais aussi une expertise inégalée. Notre mission est d'accompagner la réussite de nos clients en leur fournissant des solutions fiables et un service après-vente réactif. Chez HPA, chaque client est un partenaire sur le long terme.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION : Le Moteur Diesel -->
+        <section id="moteur-diesel-section" class="py-24 lg:py-32" style="background-color: var(--bg-light);">
+            <div class="container mx-auto px-6">
+                <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+                    <!-- Colonne Texte -->
+                    <div class="reveal" style="transition-delay: 150ms;">
+                        <h2 class="text-base font-semibold text-red-600 tracking-widest uppercase">Motorisation de Pointe</h2>
+                        <p class="text-4xl md:text-5xl font-extrabold mt-4" style="color: var(--blue-primary);">Partenaire Officiel Le Moteur Diesel</p>
+                        <p class="mt-6 text-lg text-gray-600 leading-relaxed">
+                           En tant que concessionnaire officiel de <strong>Le Moteur Diesel</strong>, nous offrons une gamme complète de moteurs performants et fiables, reconnus pour leur robustesse et leur longévité. Notre expertise nous permet de vous proposer des solutions de motorisation optimales pour toutes vos applications industrielles et commerciales, assurant puissance et durabilité.
+                        </p>
+                    </div>
+                    <!-- Colonne Image -->
+                    <div class="reveal">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSB6ZeI6S4ULjnVHDnmCEBf_mhAfrQrMyNfpp0i7N_ngZlhDNrMLEXdYqJ7C9A1ODClC_o&usqp=CAU" alt="Moteur Diesel" class="w-full h-auto rounded-lg shadow-xl">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION Fonctionnalités IVECO -->
+        <section id="features-section" class="py-24 lg:py-32" style="background-color: var(--bg-dark);">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-20">
+                    <h2 class="text-base font-semibold text-red-500 tracking-widest uppercase reveal">Expérience de Conduite</h2>
+                    <p class="text-4xl md:text-6xl font-extrabold mt-4 text-white reveal" style="transition-delay: 100ms;">Le Confort Réinventé</p>
+                </div>
+                <div id="feature-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Card 1 -->
+                    <div class="feature-grid-card reveal" style="transition-delay: 200ms;" 
+                         data-title="Conçue pour vous faciliter la vie à bord"
+                         data-description="La nouvelle planche de bord est dotée de nombreux espaces de rangement pour optimiser le confort. Les conducteurs n’auront plus peur d’égarer leur appareil mobile ou de manquer de charge grâce aux supports de téléphone et de tablette et au nouveau chargeur à induction. Leurs affaires seront à portée de main dans le nouveau rangement central placé entre le conducteur et le passager."
+                         data-img="https://www.iveco.com/france/-/media/IVECOdotcom/UK/Products/Daily/drive-experience/new_dashboard.jpg?rev=-1">
+                        <img src="https://www.iveco.com/france/-/media/IVECOdotcom/UK/Products/Daily/drive-experience/new_dashboard.jpg?rev=-1" alt="Planche de bord fonctionnelle" class="w-full h-96 object-cover">
+                        <div class="overlay">
+                            <div>
+                                <h3 class="text-2xl font-bold text-white">Planche de bord fonctionnelle</h3>
+                                <p class="text-white/80 mt-2">Conçue pour vous faciliter la vie à bord.</p>
+                                <button class="learn-more-btn">En savoir plus</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="feature-grid-card reveal" style="transition-delay: 350ms;"
+                         data-title="Interface de conduite conviviale"
+                         data-description="L'interface numérique entièrement configurable offre une clarté exceptionnelle et un accès intuitif à toutes les informations de conduite. Personnalisez l'affichage pour voir ce qui compte le plus pour vous, réduisant les distractions et améliorant la sécurité."
+                         data-img="https://autodesignmagazine.com/wp-content/uploads/2024/02/14-IVECO-CROSSWAY.jpg">
+                        <img src="https://autodesignmagazine.com/wp-content/uploads/2024/02/14-IVECO-CROSSWAY.jpg" alt="Interface de conduite conviviale" class="w-full h-96 object-cover">
+                        <div class="overlay">
+                           <div>
+                                <h3 class="text-2xl font-bold text-white">Interface de conduite conviviale</h3>
+                                <p class="text-white/80 mt-2">Productivité et confort à bord.</p>
+                                <button class="learn-more-btn">En savoir plus</button>
+                           </div>
+                        </div>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="feature-grid-card reveal" style="transition-delay: 500ms;"
+                         data-title="Rapidité et simplification des livraisons"
+                         data-description="Le système d'ouverture et de démarrage sans clé vous permet de gagner un temps précieux à chaque arrêt. Plus besoin de chercher vos clés, une simple pression suffit pour déverrouiller et démarrer, optimisant ainsi chaque livraison."
+                         data-img="https://www.iveco.com/france/-/media/IVECOdotcom/UK/Products/Daily/drive-experience/daily-air-pro.jpeg?rev=-1">
+                        <img src="https://www.iveco.com/france/-/media/IVECOdotcom/UK/Products/Daily/drive-experience/daily-air-pro.jpeg?rev=-1" alt="Système d'ouverture sans clé" class="w-full h-96 object-cover">
+                        <div class="overlay">
+                           <div>
+                                <h3 class="text-2xl font-bold text-white">Démarrage sans clé</h3>
+                                <p class="text-white/80 mt-2">Rapidité et simplification des livraisons.</p>
+                                <button class="learn-more-btn">En savoir plus</button>
+                           </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Véhicules Phares -->
+        <section id="vehicles-section" class="py-24 bg-white">
+             <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-extrabold mb-4 reveal" style="color: var(--blue-primary);">Nos Véhicules Phares</h2>
+                    <p class="text-lg text-gray-600 max-w-3xl mx-auto reveal" style="transition-delay: 100ms;">Une sélection de nos meilleurs modèles, conçus pour la performance, la fiabilité et l'efficacité.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                    <!-- Véhicule 1: IVECO Daily -->
+                    <div class="bg-white rounded-xl shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 overflow-hidden flex flex-col reveal" style="transition-delay: 200ms;">
+                        <div class="relative">
+                           <img src="https://www.sotradies.tn/wp-content/uploads/2017/10/26488890141_a29ebd2b71_k-1.jpg" onerror="this.onerror=null;this.src='https://placehold.co/600x400/3B82F6/ffffff?text=IVECO+Daily';" alt="IVECO Daily" class="w-full h-64 object-cover">
+                           <div class="absolute top-4 left-4 bg-blue-600 text-white text-sm font-bold py-1 px-3 rounded-full">UTILITAIRE</div>
+                        </div>
+                        <div class="p-8 flex-grow flex flex-col">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2">IVECO Daily</h3>
+                            <p class="text-gray-600 mb-6 flex-grow">Le compagnon idéal pour vos livraisons, combinant robustesse, efficacité et une polyvalence exceptionnelle.</p>
+                            <a href="#" class="text-blue-600 font-semibold inline-flex items-center group mt-auto">Fiche Technique <i class="fas fa-arrow-right ml-2 transition-transform duration-300 group-hover:translate-x-1"></i></a>
+                        </div>
+                    </div>
+                     <!-- Véhicule 2: New Holland T7 -->
+                    <div class="bg-white rounded-xl shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 overflow-hidden flex flex-col reveal" style="transition-delay: 300ms;">
+                         <div class="relative">
+                            <img src="https://cnhi-p-001-delivery.sitecorecontenthub.cloud/api/public/content/0b60cdf315d44fb590a27e18eebe4562?v=ad22db3b&t=size1100" onerror="this.onerror=null;this.src='https://placehold.co/600x400/27ae60/ffffff?text=New+Holland+T7';" alt="New Holland T7" class="w-full h-64 object-cover">
+                            <div class="absolute top-4 left-4 bg-green-600 text-white text-sm font-bold py-1 px-3 rounded-full">AGRICOLE</div>
+                         </div>
+                        <div class="p-8 flex-grow flex flex-col">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2">New Holland T7</h3>
+                            <p class="text-gray-600 mb-6 flex-grow">Puissant et technologique, le T7 est conçu pour optimiser vos opérations agricoles avec une fiabilité inégalée.</p>
+                            <a href="#" class="text-green-600 font-semibold inline-flex items-center group mt-auto">Fiche Technique <i class="fas fa-arrow-right ml-2 transition-transform duration-300 group-hover:translate-x-1"></i></a>
+                        </div>
+                    </div>
+                     <!-- Véhicule 3: Heli -->
+                    <div class="bg-white rounded-xl shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 overflow-hidden flex flex-col reveal" style="transition-delay: 400ms;">
+                         <div class="relative">
+                             <img src="https://shop.experlift.fr/8315-large_default/chariot-tout-terrain-3000-kg-2-roues-motrices-pente-40-heli-cpcd30-w3y2g3.webp" onerror="this.onerror=null;this.src='https://placehold.co/600x400/f59e0b/ffffff?text=Heli+Forklift';" alt="Heli Forklift" class="w-full h-64 object-cover">
+                             <div class="absolute top-4 left-4 bg-amber-500 text-white text-sm font-bold py-1 px-3 rounded-full">MANUTENTION</div>
+                         </div>
+                        <div class="p-8 flex-grow flex flex-col">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2">Heli CPD30 Tout-Terrain</h3>
+                            <p class="text-gray-600 mb-6 flex-grow">Robuste et performant, ce chariot élévateur est conçu pour opérer dans les conditions les plus exigeantes.</p>
+                            <a href="#" class="text-amber-600 font-semibold inline-flex items-center group mt-auto">Fiche Technique <i class="fas fa-arrow-right ml-2 transition-transform duration-300 group-hover:translate-x-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-16 reveal" style="transition-delay: 500ms;">
+                    <a href="#" class="btn-primary font-semibold py-3 px-10 rounded-full text-lg">Voir Tout le Catalogue</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Atouts -->
+        <section id="strengths-section" class="py-24" style="background-color: var(--bg-light);">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-extrabold mb-4 reveal" style="color: var(--blue-primary);">Pourquoi Choisir HPA ?</h2>
+                    <p class="text-lg text-gray-600 max-w-3xl mx-auto reveal" style="transition-delay: 100ms;">Notre engagement va au-delà de la simple vente. Nous vous offrons une expérience complète.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+                    <!-- Atout 1 -->
+                    <div class="text-center p-6 reveal" style="transition-delay: 200ms;">
+                        <div class="flex items-center justify-center h-20 w-20 rounded-full bg-red-100 text-red-600 mx-auto mb-6">
+                            <i class="fas fa-tools fa-2x"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">SAV Expert</h3>
+                        <p class="text-gray-600">Un service après-vente réactif et des techniciens certifiés pour une maintenance impeccable.</p>
+                    </div>
+                    <!-- Atout 2 -->
+                    <div class="text-center p-6 reveal" style="transition-delay: 300ms;">
+                        <div class="flex items-center justify-center h-20 w-20 rounded-full bg-blue-100 text-blue-600 mx-auto mb-6">
+                            <i class="fas fa-certificate fa-2x"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Qualité Garantie</h3>
+                        <p class="text-gray-600">Nous distribuons uniquement des marques leaders, reconnues pour leur fiabilité et leur performance.</p>
+                    </div>
+                    <!-- Atout 3 -->
+                    <div class="text-center p-6 reveal" style="transition-delay: 400ms;">
+                        <div class="flex items-center justify-center h-20 w-20 rounded-full bg-blue-100 text-blue-600 mx-auto mb-6">
+                            <i class="fas fa-cogs fa-2x"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Pièces d'Origine</h3>
+                        <p class="text-gray-600">Un large stock de pièces de rechange d'origine pour assurer la longévité de vos équipements.</p>
+                    </div>
+                    <!-- Atout 4 -->
+                    <div class="text-center p-6 reveal" style="transition-delay: 500ms;">
+                        <div class="flex items-center justify-center h-20 w-20 rounded-full bg-blue-100 text-blue-600 mx-auto mb-6">
+                            <i class="fas fa-headset fa-2x"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Conseil Personnalisé</h3>
+                        <p class="text-gray-600">Notre équipe d'experts vous accompagne pour trouver la solution la mieux adaptée à vos besoins.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION : Nos Partenaires -->
+        <section id="partners-section" class="py-24 bg-white">
+          <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+              <h2 class="text-4xl md:text-5xl font-extrabold mb-4 reveal" style="color: var(--blue-primary);">Nos Partenaires de Confiance</h2>
+              <p class="text-lg text-gray-600 max-w-3xl mx-auto reveal" style="transition-delay: 100ms;">Nous sommes fiers de collaborer avec les leaders mondiaux de l'industrie.</p>
+            </div>
+            <div class="flex flex-wrap items-center justify-center gap-x-16 gap-y-12 lg:gap-x-24">
+              <!-- Iveco Logo -->
+              <div class="reveal" style="transition-delay: 200ms;">
+                <img src="https://cdn.freebiesupply.com/logos/large/2x/iveco-logo-png-transparent.png" alt="Iveco Logo" class="h-24 object-contain transition duration-300 ease-in-out hover:scale-105">
+              </div>
+              <!-- Heli Logo -->
+              <div class="reveal" style="transition-delay: 300ms;">
+                 <img src="https://hpforklifts.com/wp-content/uploads/2020/11/New-Heli-Logo-10.19.2020-1.png" alt="Heli Logo" class="h-24 object-contain transition duration-300 ease-in-out hover:scale-105">
+              </div>
+              <!-- New Holland Construction Logo -->
+              <div class="reveal" style="transition-delay: 400ms;">
+                <img src="https://getlogovector.com/wp-content/uploads/2021/08/new-holland-construction-logo-vector.png" alt="New Holland Construction Logo" class="h-24 object-contain transition duration-300 ease-in-out hover:scale-105">
+              </div>
+              <!-- New Holland Agriculture Logo -->
+              <div class="reveal" style="transition-delay: 500ms;">
+                <img src="https://img.favpng.com/7/2/14/new-holland-agriculture-agricultural-machinery-tractor-logo-png-favpng-fhvnRSdPVardc04ty2C5r2db8.jpg" alt="New Holland Agriculture Logo" class="h-24 object-contain transition duration-300 ease-in-out hover:scale-105">
+              </div>
+              <!-- Cifa Logo -->
+              <div class="reveal" style="transition-delay: 600ms;">
+                <img src="https://www.yusco.rs/images/com_hikashop/upload/cifa_logo.jpg" alt="Cifa Logo" class="h-24 object-contain transition duration-300 ease-in-out hover:scale-105">
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section Témoignage -->
+        <section class="py-24" style="background-color: var(--blue-primary);">
+            <div class="container mx-auto px-6 text-center">
+               <div class="max-w-4xl mx-auto">
+                    <i class="fas fa-quote-left fa-3x text-blue-400 mb-6 reveal"></i>
+                     <p class="text-2xl md:text-3xl font-medium text-white leading-relaxed mb-8 reveal" style="transition-delay: 100ms;">
+                        "Le service après-vente de HPA est sans égal. Leur équipe est toujours disponible et a su résoudre nos problèmes rapidement, minimisant ainsi l'impact sur nos opérations."
+                    </p>
+                    <div class="reveal" style="transition-delay: 200ms;">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-16 h-16 rounded-full mx-auto mb-4 border-2 border-blue-400" alt="Client satisfait">
+                        <h4 class="text-xl font-bold text-white">Karim Ben Salah</h4>
+                        <p class="text-blue-300">Directeur de chantier, BTP Construction</p>
+                    </div>
+               </div>
+            </div>
+        </section>
+
+
+        <!-- Section Contact & Map -->
+        <section id="contact-section" class="py-24 bg-white">
+            <div class="container mx-auto px-6">
+                 <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-extrabold mb-4 reveal" style="color: var(--blue-primary);">Rendez-nous Visite</h2>
+                    <p class="text-lg text-gray-600 max-w-3xl mx-auto reveal" style="transition-delay: 100ms;">Notre équipe vous attend à Monastir pour vous conseiller et vous faire découvrir notre showroom.</p>
+                </div>
+                <div class="w-full rounded-xl overflow-hidden shadow-2xl reveal" style="height: 500px; transition-delay: 200ms;">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d102375.05927572718!2d10.741031252917762!3d35.7601440263628!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x130212f718223d61%3A0xc3b4c9103e5c941c!2sMonastir%2C%20Tunisie!5e0!3m2!1sfr!2sfr!4v1700000000000!5m2!1sfr!2sfr"
+                        width="100%"
+                        height="100%"
+                        style="border:0;"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Pied de Page (Footer) -->
+    <footer class="text-white pt-20 pb-10 px-6 md:px-12" style="background-color: var(--blue-primary);">
+        <div class="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div class="md:col-span-1">
+                <h3 class="text-white text-2xl font-bold mb-4">HPA Monastir</h3>
+                <p class="text-gray-300 leading-relaxed">Votre partenaire de confiance pour les véhicules industriels, de construction et agricoles en Tunisie.</p>
+                 <div class="flex space-x-5 mt-6">
+                    <a href="#" class="text-gray-300 hover:text-white text-2xl transition duration-300 transform hover:scale-110"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-gray-300 hover:text-white text-2xl transition duration-300 transform hover:scale-110"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-gray-300 hover:text-white text-2xl transition duration-300 transform hover:scale-110"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div>
+                <h3 class="text-white text-xl font-semibold mb-4">Navigation</h3>
+                <ul class="space-y-3">
+                    <li><a href="#hero-section" class="text-gray-300 hover:text-red-400 transition duration-300">Accueil</a></li>
+                    <li><a href="catalogue.html" class="text-gray-300 hover:text-red-400 transition duration-300">Catalogue</a></li>
+                    <li><a href="sav.html" class="text-gray-300 hover:text-red-400 transition duration-300">Service Après-Vente</a></li>
+                    <li><a href="#contact-section" class="text-gray-300 hover:text-red-400 transition duration-300">Contact</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-white text-xl font-semibold mb-4">Contactez-Nous</h3>
+                <ul class="space-y-4 text-gray-300">
+                    <li class="flex items-start"><i class="fas fa-map-marker-alt text-blue-300 mr-3 mt-1 w-5 text-center"></i><span>Frina, Monastir, Tunisie</span></li>
+                    <li class="flex items-start"><i class="fas fa-phone-alt text-blue-300 mr-3 mt-1 w-5 text-center"></i><span>+216 73 482 042</span></li>
+                    <li class="flex items-start"><i class="fas fa-envelope text-blue-300 mr-3 mt-1 w-5 text-center"></i><span>hpamonastir@gmail.com</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="border-t border-gray-700 mt-12 pt-8 text-center text-gray-400">
+            <p>&copy; 2024 Hammouda Pièce Auto (HPA). Tous droits réservés.</p>
+        </div>
+    </footer>
+    
+    <!-- Panneau latéral (Slide-in Panel) -->
+    <div id="feature-panel-backdrop"></div>
+    <div id="feature-panel">
+        <button id="close-panel-btn">&times;</button>
+        <div id="feature-panel-content">
+            <!-- Le contenu sera injecté ici par JavaScript -->
+        </div>
+    </div>
+
+
+    <!-- ÉLÉMENTS DU CHATBOT -->
+    <div id="chatbot-toggler">
+        <i class="fas fa-comments"></i>
+    </div>
+    <div id="chatbot-window">
+        <div id="chatbot-header">
+            <h3>Assistant HPA</h3>
+            <button id="close-chatbot">&times;</button>
+        </div>
+        <div id="chat-messages">
+             <!-- Les messages apparaîtront ici -->
+        </div>
+        <form id="chat-form">
+            <input type="text" id="chat-input" placeholder="Posez votre question..." autocomplete="off">
+            <button type="submit" id="chat-submit" disabled>
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </form>
+    </div>
+
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Logique du Carrousel ---
+            let slideIndex = 0;
+            const slides = document.querySelectorAll('#hero-carousel .carousel-item');
+            let carouselInterval;
+
+            function showSlide(n) {
+                slideIndex = (n + slides.length) % slides.length;
+                slides.forEach((slide, index) => {
+                    slide.classList.remove('active', 'opacity-100');
+                    slide.classList.add('opacity-0');
+                    if (index === slideIndex) {
+                        slide.classList.add('active');
+                        void slide.offsetWidth;
+                        slide.classList.add('opacity-100');
+                    }
+                });
+            }
+
+            function nextSlide() { showSlide(slideIndex + 1); }
+            function prevSlide() { showSlide(slideIndex - 1); }
+
+            function startCarousel() {
+                if (slides.length > 0) {
+                    carouselInterval = setInterval(nextSlide, 6000); // Défilement toutes les 6 secondes
+                }
+            }
+
+            // Attacher les fonctions aux boutons du carrousel
+            window.nextSlide = nextSlide;
+            window.prevSlide = prevSlide;
+
+            if (slides.length > 0) {
+                showSlide(0);
+                startCarousel();
+            }
+            
+            // --- Logique du Panneau Latéral (Feature Panel) ---
+            const featureGrid = document.getElementById('feature-grid');
+            const panel = document.getElementById('feature-panel');
+            const panelBackdrop = document.getElementById('feature-panel-backdrop');
+            const panelContent = document.getElementById('feature-panel-content');
+            const closePanelBtn = document.getElementById('close-panel-btn');
+
+            function openPanel(card) {
+                const title = card.dataset.title;
+                const description = card.dataset.description;
+                const imgSrc = card.dataset.img;
+
+                panelContent.innerHTML = `
+                    <h2 class="text-4xl font-extrabold mb-6" style="color: var(--blue-primary);">${title}</h2>
+                    <img src="${imgSrc}" alt="${title}" class="w-full rounded-lg shadow-lg mb-6">
+                    <p class="text-gray-700 leading-relaxed">${description}</p>
+                `;
+                
+                document.documentElement.classList.add('panel-open');
+                panel.classList.add('active');
+                panelBackdrop.classList.add('active');
+            }
+
+            function closePanel() {
+                document.documentElement.classList.remove('panel-open');
+                panel.classList.remove('active');
+                panelBackdrop.classList.remove('active');
+            }
+
+            if (featureGrid) {
+                featureGrid.addEventListener('click', (e) => {
+                    const card = e.target.closest('.feature-grid-card');
+                    if (card) {
+                        openPanel(card);
+                    }
+                });
+            }
+
+            closePanelBtn.addEventListener('click', closePanel);
+            panelBackdrop.addEventListener('click', closePanel);
+
+
+            // --- Logique de l'en-tête (disparaît au scroll) ---
+            const header = document.getElementById('main-header');
+            let lastScrollY = window.scrollY;
+
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('header-scrolled');
+                } else {
+                    header.classList.remove('header-scrolled');
+                }
+
+                if (lastScrollY < window.scrollY && window.scrollY > header.offsetHeight) {
+                    // Scroll Down
+                    header.classList.add('header-hidden');
+                } else {
+                    // Scroll Up
+                    header.classList.remove('header-hidden');
+                }
+                lastScrollY = window.scrollY;
+            });
+
+            // --- Animations au défilement (Intersection Observer) ---
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1 // L'élément devient visible quand 10% est affiché
+            });
+
+            const elementsToReveal = document.querySelectorAll('.reveal');
+            elementsToReveal.forEach(el => observer.observe(el));
+
+            // --- LOGIQUE DU CHATBOT ---
+            const chatbotToggler = document.getElementById('chatbot-toggler');
+            const chatbotWindow = document.getElementById('chatbot-window');
+            const closeChatbotBtn = document.getElementById('close-chatbot');
+            const chatMessages = document.getElementById('chat-messages');
+            const chatForm = document.getElementById('chat-form');
+            const chatInput = document.getElementById('chat-input');
+            const chatSubmitBtn = document.getElementById('chat-submit');
+
+            let chatHistory = [];
+
+            // Activer/désactiver le bouton d'envoi
+            chatInput.addEventListener('input', () => {
+                chatSubmitBtn.disabled = chatInput.value.trim() === '';
+            });
+
+            // Ouvrir/Fermer le chatbot
+            chatbotToggler.addEventListener('click', () => {
+                 chatbotWindow.classList.toggle('visible');
+                 if (chatbotWindow.classList.contains('visible') && chatMessages.children.length === 0) {
+                  addBotMessage("Bonjour ! Je suis l'assistant virtuel de HPA. Comment puis-je vous aider aujourd'hui ?");
+                 }
+            });
+            closeChatbotBtn.addEventListener('click', () => chatbotWindow.classList.remove('visible'));
+
+            // Gérer l'envoi de message
+            chatForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const userMessage = chatInput.value.trim();
+                if (userMessage) {
+                    addUserMessage(userMessage);
+                    chatInput.value = '';
+                    chatSubmitBtn.disabled = true;
+                    getBotResponse(userMessage);
+                }
+            });
+
+            // Ajouter un message utilisateur à l'UI
+            function addUserMessage(message) {
+                chatHistory.push({ role: "user", parts: [{ text: message }] });
+                const messageElement = `
+                    <div class="chat-message user">
+                        <div class="message-bubble">${message}</div>
+                        <div class="message-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    </div>
+                `;
+                chatMessages.innerHTML += messageElement;
+                scrollToBottom();
+            }
+
+            // Ajouter un message du bot à l'UI
+            function addBotMessage(message, isTyping = false) {
+                 if (!isTyping) {
+                    chatHistory.push({ role: "model", parts: [{ text: message }] });
+                 }
+                const messageElement = `
+                    <div class="chat-message bot">
+                        <div class="message-avatar">
+                           <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-bubble">
+                            ${isTyping ? `
+                                <div class="typing-indicator">
+                                    <span></span><span></span><span></span>
+                                </div>
+                            ` : message}
+                        </div>
+                    </div>
+                `;
+                chatMessages.innerHTML += messageElement;
+                scrollToBottom();
+            }
+
+            // Faire défiler vers le bas
+            function scrollToBottom() {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            // Obtenir une réponse du bot via l'API Gemini
+            async function getBotResponse(prompt) {
+                // Afficher l'indicateur de frappe
+                addBotMessage('', true);
+                const typingIndicator = chatMessages.querySelector('.bot:last-child');
+
+                // Contexte pour l'IA
+                const contextPrompt = `
+                    Tu es un assistant virtuel expert pour HPA (Hammouda Pièce Auto) à Monastir, en Tunisie.
+                    HPA est le concessionnaire officiel des marques IVECO (véhicules industriels), New Holland (équipements agricoles), CIFA (équipements de construction), Heli (chariots élévateurs) et Motors Diesel.
+                    Tes missions sont :
+                    1. Répondre aux questions des clients sur les produits (modèles, spécifications, prix si tu les connais), les services (SAV, pièces de rechange, conseil), et l'entreprise HPA.
+                    2. Être toujours professionnel, serviable et amical.
+                    3. Si tu ne connais pas la réponse, dis-le honnêtement et suggère au client de contacter directement HPA via le formulaire de contact ou par téléphone au +216 73 482 042.
+                    4. Garde tes réponses concises et claires.
+
+                    Historique de la conversation actuelle:
+                    ${JSON.stringify(chatHistory)}
+
+                    Nouvelle question du client: "${prompt}"
+                `;
+
+                const payload = {
+                  contents: [{ role: "user", parts: [{ text: contextPrompt }] }]
+                };
+                const apiKey = ""; // Laissé vide, géré par l'environnement
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Erreur API: ${response.statusText}`);
+                    }
+
+                    const result = await response.json();
+
+                    // Supprimer l'indicateur de frappe
+                    if (typingIndicator) {
+                        typingIndicator.remove();
+                    }
+
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const text = result.candidates[0].content.parts[0].text;
+                        addBotMessage(text);
+                    } else {
+                        throw new Error("La réponse de l'API est vide ou mal formée.");
+                    }
+                } catch (error) {
+                    console.error("Erreur avec l'API Gemini:", error);
+                    // Supprimer l'indicateur de frappe en cas d'erreur aussi
+                    if (typingIndicator) {
+                        typingIndicator.remove();
+                    }
+                    addBotMessage("Désolé, je rencontre un problème technique. Veuillez réessayer plus tard ou contacter directement notre service client.");
+                }
+            }
+        });
+    </script>
+</body>
+</ht

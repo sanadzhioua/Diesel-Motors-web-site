@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Après-Vente - HPA Monastir</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --blue-primary: #0A2A43; /* Bleu marine profond */
+            --blue-accent: #007BFF; /* Bleu vif pour les accents */
+            --blue-darker: #0056b3; /* Bleu plus sombre pour les dégradés */
+            --red-accent: #D32F2F;  /* Rouge pour les accents, comme demandé */
+            --text-dark: #1F2937; /* Gris foncé pour le texte */
+            --text-light: #6B7280; /* Gris plus clair pour le texte secondaire */
+            --bg-light: #F9FAFB; /* Gris très clair pour le fond */
+            --border-light: #E5E7EB; /* Gris clair pour les bordures */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .hero-section {
+            background-image: linear-gradient(rgba(10, 42, 67, 0.6), rgba(10, 42, 67, 0.6)), url('https://apresvente.ivecoest.com/public/img/big/CabinaADAFP80401jpg_65fc5234664045.26001965.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        .sav-tab {
+            position: relative;
+            transition: all 0.3s ease-in-out;
+            color: var(--text-light);
+            border-bottom: 3px solid transparent;
+        }
+        .sav-tab:hover {
+            color: var(--blue-primary);
+        }
+        .sav-tab.active {
+            color: var(--blue-primary);
+            border-bottom-color: var(--red-accent); /* Touche de rouge ici */
+        }
+        .sav-tab .fas {
+            transition: color 0.3s ease-in-out;
+        }
+        .sav-tab.active .fas {
+            color: var(--red-accent); /* Touche de rouge pour l'icône active */
+        }
+        .sav-content-item {
+            display: none;
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        .sav-content-item.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .brochure-card {
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            min-height: 450px;
+        }
+        .brochure-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.3);
+        }
+        .brochure-card .icon-arrow {
+            transition: transform 0.3s ease;
+        }
+        .brochure-card:hover .icon-arrow {
+            transform: translateX(8px);
+        }
+        .brochure-link-indicator {
+            display: inline-block;
+            padding: 8px 16px;
+            font-weight: 600;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            border-radius: 9999px;
+            transition: all 0.3s ease;
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+        }
+        .brochure-card:hover .brochure-link-indicator {
+             background-color: rgba(255, 255, 255, 0.2);
+             border-color: white;
+        }
+
+        /* --- STYLES AMÉLIORÉS POUR LE CATALOGUE DE PIÈCES --- */
+        .catalog-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        @media (min-width: 640px) { .catalog-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (min-width: 768px) { .catalog-grid { grid-template-columns: repeat(4, 1fr); } }
+        @media (min-width: 1024px) { .catalog-grid { grid-template-columns: repeat(6, 1fr); } }
+
+        .catalog-card {
+            background-color: white;
+            border: 1px solid #e9ecef;
+            border-radius: 0.75rem;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            cursor: pointer;
+        }
+        .catalog-card:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 10px 30px -5px rgba(0,123,255,0.15);
+            border-color: var(--blue-accent);
+        }
+        .catalog-card.active {
+             border-color: var(--blue-accent);
+             box-shadow: 0 4px 15px -3px rgba(0,123,255,0.1);
+             background-color: #eff6ff;
+        }
+        .catalog-card img {
+            height: 120px;
+            width: auto;
+            margin: 0 auto 1rem;
+            object-fit: contain;
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .catalog-card:hover img {
+            transform: scale(1.1);
+        }
+        .sub-category-container {
+            grid-column: 1 / -1;
+            background-color: #e9ecef;
+            border-radius: 0.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.6s cubic-bezier(0.16, 1, 0.3, 1), padding 0.6s cubic-bezier(0.16, 1, 0.3, 1), margin 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease-in-out;
+            padding: 0 1.5rem;
+            margin-top: 0;
+            opacity: 0;
+        }
+        .sub-category-container.open {
+            max-height: 1000px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            opacity: 1;
+        }
+        .sub-category-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+        }
+        .sub-category-card {
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid #dee2e6;
+            cursor: pointer;
+            flex-basis: 180px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: scale(0.95) translateY(10px);
+            animation: popIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+        @keyframes popIn {
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        .sub-category-card:hover {
+             transform: translateY(-5px);
+             border-color: var(--blue-accent);
+             box-shadow: 0 6px 20px -5px rgba(0,0,0,0.1);
+        }
+        .sub-category-card img {
+             height: 95px;
+             margin-bottom: 0.75rem;
+        }
+
+        /* --- NOUVEAU DESIGN POUR SECTION ENTRETIEN (BACKGROUND IMAGE) --- */
+        .text-shadow {
+            text-shadow: 0 2px 5px rgba(0,0,0,0.6);
+        }
+        .entretien-bg-card {
+            position: relative;
+            min-height: 550px; /* Hauteur augmentée */
+            border-radius: 1rem;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            background-size: cover;
+            background-position: center;
+            color: white;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .entretien-bg-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        .entretien-bg-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, rgba(10, 42, 67, 0.8) 0%, rgba(10, 42, 67, 0) 80%);
+            z-index: 1;
+        }
+        .entretien-bg-card.align-right::before {
+            background: linear-gradient(to left, rgba(10, 42, 67, 0.8) 0%, rgba(10, 42, 67, 0) 80%);
+        }
+        .entretien-bg-card .content-wrapper {
+            position: relative;
+            z-index: 2;
+            padding: 2rem 3rem;
+            width: 100%;
+        }
+
+        /* --- NOUVEAUX STYLES POUR SERVICE RAPIDE --- */
+        .service-rapide-card {
+            position: relative;
+            border-radius: 1rem;
+            overflow: hidden;
+            color: white;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            min-height: 380px;
+            display: flex;
+            flex-direction: column;
+        }
+        .service-rapide-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        .service-rapide-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(10, 42, 67, 0.95) 0%, rgba(10, 42, 67, 0.4) 100%);
+            z-index: 1;
+        }
+        .service-rapide-card .card-content {
+            position: relative;
+            z-index: 2;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .service-rapide-card.no-bg {
+            background-color: white;
+            color: var(--text-dark);
+            min-height: auto;
+        }
+        .service-rapide-card.no-bg::before {
+            display: none;
+        }
+
+        /* --- STYLES DU CHATBOT --- */
+        #chatbot-fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 4rem;
+            height: 4rem;
+            background-color: var(--blue-accent);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 5px 20px rgba(0, 123, 255, 0.4);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            z-index: 1000;
+        }
+        #chatbot-fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(0, 123, 255, 0.5);
+            background-color: var(--red-accent); /* Touche de rouge au survol */
+        }
+        #chatbot-window {
+            position: fixed;
+            bottom: 7.5rem;
+            right: 2rem;
+            width: 90%;
+            max-width: 400px;
+            height: 70vh;
+            max-height: 600px;
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transform-origin: bottom right;
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+            z-index: 999;
+        }
+        #chatbot-window.hidden {
+            transform: scale(0);
+            opacity: 0;
+        }
+        #chatbot-header {
+            background-color: var(--blue-primary);
+            color: white;
+            padding: 1rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #chatbot-header-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        #chatbot-messages {
+            flex-grow: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .message {
+            padding: 0.75rem 1rem;
+            border-radius: 1.25rem;
+            max-width: 80%;
+            line-height: 1.4;
+        }
+        .user-message {
+            background-color: var(--blue-accent);
+            color: white;
+            border-bottom-right-radius: 0.25rem;
+            align-self: flex-end;
+        }
+        .bot-message {
+            background-color: #E5E7EB;
+            color: var(--text-dark);
+            border-bottom-left-radius: 0.25rem;
+            align-self: flex-start;
+        }
+        #chatbot-input-container {
+            border-top: 1px solid var(--border-light);
+            padding: 0.75rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+        #chatbot-input {
+            flex-grow: 1;
+            border: 1px solid var(--border-light);
+            border-radius: 9999px;
+            padding: 0.5rem 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        #chatbot-input:focus {
+            border-color: var(--blue-accent);
+        }
+        #chatbot-send-btn {
+            background-color: var(--blue-accent);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 2.5rem;
+            height: 2.5rem;
+            flex-shrink: 0;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        #chatbot-send-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- En-tête (Header) -->
+    <header class="bg-white/90 backdrop-blur-sm shadow-sm py-4 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between sticky top-0 z-50">
+        <div class="flex-shrink-0 mb-4 md:mb-0">
+            <a href="acceuil.html" class="flex items-center space-x-3">
+                <!-- MODIFIÉ : Logo rectangulaire local -->
+                <img src="logo.jpg" alt="Logo HPA" class="h-12 w-24 object-contain" onerror="this.onerror=null;this.src='https://placehold.co/96x48/0A2A43/ffffff?text=HPA';this.alt='Logo HPA non trouvé';">
+                <span class="text-2xl font-bold" style="color: var(--blue-primary);">HPA Monastir</span>
+            </a>
+        </div>
+        <nav class="flex-grow">
+            <ul class="flex flex-wrap justify-center md:justify-end space-x-5 md:space-x-8 text-base font-medium text-gray-700">
+                <li><a href="acceuil.html" class="hover:text-blue-600 transition duration-300">Accueil</a></li>
+                <li><a href="acceuil.html#brands-section" class="hover:text-blue-600 transition duration-300">Nos Marques</a></li>
+                <li><a href="#" class="text-blue-600 font-bold">SAV</a></li>
+                <li><a href="#brochures-section" class="hover:text-blue-600 transition duration-300">Brochures</a></li>
+                <li><a href="acceuil.html#about-section" class="hover:text-blue-600 transition duration-300">À Propos</a></li>
+                <li><a href="acceuil.html#contact-section" class="hover:text-blue-600 transition duration-300">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Section Hero - Full Screen -->
+    <section class="hero-section text-white text-center px-4 min-h-screen flex flex-col justify-center items-center">
+        <div>
+            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight reveal">Service Après-Vente d'Excellence</h1>
+            <p class="text-lg md:text-xl text-gray-200 mt-6 max-w-3xl mx-auto reveal" style="transition-delay: 150ms;">
+                Votre partenaire expert pour la maintenance et les pièces d'origine.
+                <br>La performance et la fiabilité, garanties.
+            </p>
+        </div>
+    </section>
+
+    <!-- Section Caractéristiques avec Icônes -->
+    <section class="bg-white py-16">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+                 <div class="flex flex-col items-center p-6 rounded-lg">
+                    <div class="flex-shrink-0 w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center mb-5 shadow-inner">
+                        <i class="fas fa-warehouse text-4xl text-blue-600"></i>
+                    </div>
+                    <h3 class="font-bold text-xl text-gray-800">Espace de Stockage</h3>
+                    <p class="text-gray-600 text-base mt-2">Large inventaire de pièces d'origine.</p>
+                </div>
+                 <div class="flex flex-col items-center p-6 rounded-lg">
+                    <div class="flex-shrink-0 w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center mb-5 shadow-inner">
+                        <i class="fas fa-shipping-fast text-4xl text-blue-600"></i>
+                    </div>
+                    <h3 class="font-bold text-xl text-gray-800">Livraison Rapide</h3>
+                    <p class="text-gray-600 text-base mt-2">Recevez vos pièces où que vous soyez.</p>
+                </div>
+                 <div class="flex flex-col items-center p-6 rounded-lg">
+                    <div class="flex-shrink-0 w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center mb-5 shadow-inner">
+                        <i class="fas fa-headset text-4xl text-blue-600"></i>
+                    </div>
+                    <h3 class="font-bold text-xl text-gray-800">Service Client</h3>
+                    <p class="text-gray-600 text-base mt-2">Nos experts à votre écoute.</p>
+                </div>
+                 <div class="flex flex-col items-center p-6 rounded-lg">
+                    <div class="flex-shrink-0 w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center mb-5 shadow-inner">
+                        <i class="fas fa-tags text-4xl text-blue-600"></i>
+                    </div>
+                    <h3 class="font-bold text-xl text-gray-800">Prix Attractifs</h3>
+                    <p class="text-gray-600 text-base mt-2">Les meilleures offres du marché.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="container mx-auto px-4 md:px-6 py-16">
+        <!-- Section SAV principale -->
+        <section id="sav-section" class="bg-white p-6 sm:p-8 md:p-12 rounded-2xl shadow-xl reveal" style="transition-delay: 300ms;">
+            <!-- Tabs de navigation SAV -->
+            <div class="flex justify-center flex-wrap space-x-4 md:space-x-10 mb-12 border-b border-gray-200">
+                <button id="btn-entretien" class="sav-tab active text-base md:text-xl font-semibold py-3 px-2 md:px-4" onclick="showSavContent('entretien')">
+                    <i class="fas fa-tools mr-2 text-blue-500"></i>Entretien
+                </button>
+                <button id="btn-rapide" class="sav-tab text-base md:text-xl font-semibold py-3 px-2 md:px-4" onclick="showSavContent('rapide')">
+                    <i class="fas fa-bolt-lightning mr-2 text-yellow-500"></i>Service Rapide
+                </button>
+                <button id="btn-pieces" class="sav-tab text-base md:text-xl font-semibold py-3 px-2 md:px-4" onclick="showSavContent('pieces')">
+                    <i class="fas fa-cogs mr-2 text-gray-500"></i>Catalogue Pièces
+                </button>
+            </div>
+
+            <!-- Conteneur pour le contenu dynamique du SAV -->
+            <div id="sav-content-container" class="mt-8">
+                <!-- Contenu pour Entretien -->
+                <div id="sav-entretien" class="sav-content-item active"></div>
+                <!-- Contenu pour Service Rapide -->
+                <div id="sav-rapide" class="sav-content-item"></div>
+                <!-- Contenu pour Pièces de Rechange (Catalogue) -->
+                <div id="sav-pieces" class="sav-content-item"></div>
+            </div>
+        </section>
+
+        <!-- DESIGN IMMERSIF: Section des brochures avec image en fond -->
+        <section id="brochures-section" class="py-24">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl md:text-5xl font-extrabold" style="color: var(--blue-primary);">Nos Brochures Techniques</h2>
+                <p class="text-gray-600 mt-4 text-lg max-w-2xl mx-auto">Plongez dans l'univers de nos véhicules. Chaque brochure est une porte d'entrée vers l'innovation et la performance.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+                <!-- Brochure 1: Gamme Légère -->
+                <a href="https://www.iveco.com/belgium-fr/-/media/IVECOdotcom/France/Services/Brochures/light-FR.pdf?rev=-1" target="_blank" 
+                   class="brochure-card block relative rounded-2xl overflow-hidden shadow-2xl reveal md:col-span-2" 
+                   style="background-image: url('https://motors.tn/magazine/wp-content/uploads/2018/02/iveco-all.jpg');">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10"></div>
+                    <div class="relative h-full p-8 md:p-12 flex flex-col justify-end text-white" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
+                        <h3 class="text-3xl lg:text-4xl font-bold mb-3">Gamme Légère IVECO</h3>
+                        <p class="mb-6 opacity-90 max-w-xl">Découvrez l'ensemble de notre gamme de véhicules légers, conçus pour allier polyvalence, robustesse et efficacité énergétique.</p>
+                        <div class="mt-auto">
+                            <span class="brochure-link-indicator">Voir la brochure <i class="fas fa-arrow-right icon-arrow"></i></span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Brochure 2: Nouveau Daily MY24 -->
+                <a href="https://www.iveco.com/france/-/media/IVECOdotcom/France/ProductBrochure/DailyMY24_FR.pdf?rev=-1" target="_blank" 
+                   class="brochure-card block relative rounded-2xl overflow-hidden shadow-2xl reveal" 
+                   style="background-image: url('https://www.truckeditions.com/voy_content/uploads/2023/11/4-1024x576.jpg');">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10"></div>
+                    <div class="relative h-full p-8 md:p-12 flex flex-col justify-end text-white" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
+                        <h3 class="text-3xl lg:text-4xl font-bold mb-3">Nouveau Daily MY24</h3>
+                        <p class="mb-6 opacity-90">Une nouvelle ère de confort, de sécurité et de connectivité.</p>
+                        <div class="mt-auto">
+                            <span class="brochure-link-indicator">Voir la brochure <i class="fas fa-arrow-right icon-arrow"></i></span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Brochure 3: Daily Van -->
+                <a href="https://www.rymeautomotive.com/wp-content/uploads/2024/02/nueva-iveco-daily-2024.jpg" target="_blank" 
+                   class="brochure-card block relative rounded-2xl overflow-hidden shadow-2xl reveal" 
+                   style="background-image: url('https://www.rymeautomotive.com/wp-content/uploads/2024/02/nueva-iveco-daily-2024.jpg');">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10"></div>
+                    <div class="relative h-full p-8 md:p-12 flex flex-col justify-end text-white" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
+                        <h3 class="text-3xl lg:text-4xl font-bold mb-3">Daily Van - Le Fourgon</h3>
+                        <p class="mb-6 opacity-90">La solution parfaite pour le transport de marchandises.</p>
+                        <div class="mt-auto">
+                            <span class="brochure-link-indicator">Voir la brochure <i class="fas fa-arrow-right icon-arrow"></i></span>
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- Brochure 4: Solutions DriveAway -->
+                <a href="https://www.iveco-dealership.co.uk/uploads/files/2025/Driveaway%202025/driveaway-web-banner.jpg" target="_blank" 
+                   class="brochure-card block relative rounded-2xl overflow-hidden shadow-2xl reveal" 
+                   style="background-image: url('https://www.iveco-dealership.co.uk/uploads/files/2025/Driveaway%202025/driveaway-web-banner.jpg');">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10"></div>
+                    <div class="relative h-full p-8 md:p-12 flex flex-col justify-end text-white" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
+                        <h3 class="text-3xl lg:text-4xl font-bold mb-3">Solutions Carrossées DriveAway</h3>
+                        <p class="mb-6 opacity-90">Nos solutions prêtes à l'emploi pour tous les métiers.</p>
+                        <div class="mt-auto">
+                            <span class="brochure-link-indicator">Voir la brochure <i class="fas fa-arrow-right icon-arrow"></i></span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Brochure 5: Accessoires Daily MY24 -->
+                <a href="https://www.iveco-dealership.co.uk/media/daily-chassis-cab/DAILY%20Accessories%20Brochure%20MY24.pdf" target="_blank" 
+                   class="brochure-card block relative rounded-2xl overflow-hidden shadow-2xl reveal" 
+                   style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDuIhMdakJ9Xwab5EQPSEPmfqCTWcXJ8VI9A&s');">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10"></div>
+                    <div class="relative h-full p-8 md:p-12 flex flex-col justify-end text-white" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
+                        <h3 class="text-3xl lg:text-4xl font-bold mb-3">Catalogue Accessoires Daily MY24</h3>
+                        <p class="mb-6 opacity-90">Personnalisez votre Daily avec nos accessoires officiels.</p>
+                        <div class="mt-auto">
+                            <span class="brochure-link-indicator">Voir le catalogue <i class="fas fa-arrow-right icon-arrow"></i></span>
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- Brochure 6: Daily Châssis-Cabine MY24 -->
+                 <a href="https://www.iveco.com/belgium-fr/-/media/IVECOdotcom/MY24/Teaser_img/daily_cab_Teaser.jpg?h=574&iar=0&w=1664&rev=-1" target="_blank" 
+                   class="brochure-card block relative rounded-2xl overflow-hidden shadow-2xl reveal md:col-span-2" 
+                   style="background-image: url('https://www.iveco.com/belgium-fr/-/media/IVECOdotcom/MY24/Teaser_img/daily_cab_Teaser.jpg?h=574&iar=0&w=1664&rev=-1');">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10"></div>
+                    <div class="relative h-full p-8 md:p-12 flex flex-col justify-end text-white" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
+                        <h3 class="text-3xl lg:text-4xl font-bold mb-3">Daily Châssis-Cabine MY24</h3>
+                        <p class="mb-6 opacity-90 max-w-xl">La base polyvalente pour votre activité professionnelle. Une plateforme robuste et fiable, prête à être transformée pour tous les usages.</p>
+                        <div class="mt-auto">
+                            <span class="brochure-link-indicator">Voir la brochure <i class="fas fa-arrow-right icon-arrow"></i></span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Brochure 7: Solutions de Remorquage -->
+                <a href="https://www.truck1.fr/img/xxl/9350/Iveco-Daily-72C18-P-Finlande_9350_5604471485867.jpg" target="_blank" 
+                   class="brochure-card block relative rounded-2xl overflow-hidden shadow-2xl reveal md:col-span-2" 
+                   style="background-image: url('https://www.truck1.fr/img/xxl/9350/Iveco-Daily-72C18-P-Finlande_9350_5604471485867.jpg');">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10"></div>
+                    <div class="relative h-full p-8 md:p-12 flex flex-col justify-end text-white" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
+                        <h3 class="text-3xl lg:text-4xl font-bold mb-3">Solutions de Remorquage</h3>
+                        <p class="mb-6 opacity-90 max-w-xl">Solutions de remorquage robustes et sûres pour votre véhicule. Découvrez nos barres et attelages conçus pour les charges les plus lourdes.</p>
+                        <div class="mt-auto">
+                            <span class="brochure-link-indicator">Voir les solutions <i class="fas fa-arrow-right icon-arrow"></i></span>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Pied de Page (Footer) -->
+    <footer class="text-white pt-12 pb-8 px-6 md:px-12 reveal" style="background-color: var(--blue-primary);">
+        <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+             <!-- A Propos -->
+            <div class="md:col-span-1">
+                <h3 class="text-white text-xl font-bold mb-4">HPA Monastir</h3>
+                <p class="text-gray-300 leading-relaxed text-sm">Votre partenaire de confiance pour les véhicules industriels, de construction et agricoles en Tunisie.</p>
+                 <div class="flex space-x-4 mt-5">
+                      <a href="#" class="text-gray-300 hover:text-white text-xl transition duration-300"><i class="fab fa-facebook-f"></i></a>
+                      <a href="#" class="text-gray-300 hover:text-white text-xl transition duration-300"><i class="fab fa-instagram"></i></a>
+                      <a href="#" class="text-gray-300 hover:text-white text-xl transition duration-300"><i class="fab fa-linkedin-in"></i></a>
+                 </div>
+            </div>
+             <!-- Navigation -->
+            <div>
+                <h3 class="text-white text-lg font-semibold mb-4">Navigation</h3>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="acceuil.html" class="text-gray-300 hover:text-blue-300 transition duration-300">Accueil</a></li>
+                    <li><a href="sav.html" class="text-gray-300 hover:text-blue-300 transition duration-300">Service Après-Vente</a></li>
+                    <li><a href="acceuil.html#about-section" class="text-gray-300 hover:text-blue-300 transition duration-300">À Propos de HPA</a></li>
+                    <li><a href="acceuil.html#contact-section" class="text-gray-300 hover:text-blue-300 transition duration-300">Contact</a></li>
+                </ul>
+            </div>
+             <!-- Services -->
+            <div>
+                <h3 class="text-white text-lg font-semibold mb-4">Nos Services</h3>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="#" class="text-gray-300 hover:text-blue-300 transition duration-300">Demander un Devis</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-blue-300 transition duration-300">Réserver un Essai</a></li>
+                    <li><a href="#brochures-section" class="text-gray-300 hover:text-blue-300 transition duration-300">Télécharger Brochures</a></li>
+                    <li><a href="#" onclick="showSavContent('pieces');" class="text-gray-300 hover:text-blue-300 transition duration-300">Pièces de Rechange</a></li>
+                </ul>
+            </div>
+             <!-- Contact -->
+            <div>
+                <h3 class="text-white text-lg font-semibold mb-4">Contactez-Nous</h3>
+                <ul class="space-y-3 text-sm text-gray-300">
+                    <li class="flex items-start"><i class="fas fa-map-marker-alt text-blue-300 mr-3 mt-1 flex-shrink-0"></i><span>Frina, Monastir, Tunisie</span></li>
+                    <li class="flex items-start"><i class="fas fa-phone-alt text-blue-300 mr-3 mt-1 flex-shrink-0"></i><span>+216 73 123 456</span></li>
+                    <li class="flex items-start"><i class="fas fa-envelope text-blue-300 mr-3 mt-1 flex-shrink-0"></i><span>contact@hpa.tn</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400 text-sm">
+            <p>&copy; 2024 Hammouda Pièce Auto (HPA). Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <!-- Chatbot -->
+    <div id="chatbot-container">
+        <div id="chatbot-window" class="hidden">
+            <div id="chatbot-header">
+                <span>Assistant HPA</span>
+                <button id="chatbot-header-close">&times;</button>
+            </div>
+            <div id="chatbot-messages">
+                <!-- Les messages du chat apparaîtront ici -->
+            </div>
+            <div id="chatbot-input-container">
+                <input type="text" id="chatbot-input" placeholder="Posez votre question...">
+                <button id="chatbot-send-btn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+        <button id="chatbot-fab">
+            <i class="fas fa-comment-dots"></i>
+        </button>
+    </div>
+
+
+    <!-- JavaScript pour la logique de la page -->
+    <script>
+        // --- BASE DE DONNÉES DES SERVICES ET PIÈCES ---
+        const savData = {
+            entretien: [
+                { name: 'Vidange et Filtres', image: 'https://planet-tools.fr/blog/wp-content/uploads/2022/05/vidanger-huile-moteur.webp', description: "Maintient la performance du moteur et prolonge sa durée de vie." },
+                { name: 'Diagnostic Électronique', image: 'https://apresvente.ivecoest.com/public/img/big/PhotoAtelier4jpg_6638d57dbd54b0.09097678.jpg', description: "Détection précise des pannes avec nos outils de diagnostic de pointe." },
+                { name: 'Contrôle Freinage', image: 'https://apresvente.ivecoest.com/public/img/medium/PhotoAtelier9jpg_66432fa8d08d50.23497397.jpg', description: "Inspection complète des disques, plaquettes et liquides pour votre sécurité." },
+                { name: 'Entretien Climatisation', image: 'https://apresvente.ivecoest.com/public/img/medium/AFP7568jpg_65f9ae34b94590.60786750.jpg', description: "Recharge de gaz et nettoyage du circuit pour un confort optimal." },
+                { name: 'Révision Complète', image: 'https://apresvente.ivecoest.com/public/img/big/PhotoAtelier12jpg_65e9eaa51e7da7.96837393.jpg', description: "Un check-up complet selon les préconisations constructeur." },
+                { name: 'Service Mobile', image: 'https://apresvente.ivecoest.com/public/img/medium/638647714158218596jpg_67b33fd8076bf3.60425142.jpg', description: "Notre équipe se déplace sur votre site pour effectuer l'entretien complet de votre flotte." }
+            ],
+            serviceRapide: {
+                "Entretien Stralis": {
+                    image: "https://www.covi.fr/wp-content/uploads/2023/08/637423347942837047-scaled.jpg",
+                    parts: [
+                        { name: "Filtre à huile", ref: "500086331" },
+                        { name: "Filtre à gasoil", ref: "2992662" },
+                        { name: "Filtre à gasoil", ref: "2995711" },
+                        { name: "Filtre à air", ref: "2996126" },
+                        { name: "Filtre reniflard", ref: "504153481" },
+                        { name: "Huile moteur 15w40 Urania LD7", ref: "26 Litres" }
+                    ]
+                },
+                "Entretien Chariot HELI": {
+                    image: "https://www.blog-manutention.fr/fileadmin/fr/Blog/Blog_Articles/Teaser_Bilder_600x600/Entretien_controle_chariot_STILL_600x600.png",
+                    parts: [
+                        { name: "Filtre à huile", ref: "8970497081" },
+                        { name: "Filtre à gasoil", ref: "84214564" },
+                        { name: "Filtre à gasoil", ref: "HA2001" },
+                        { name: "Filtre à air Inter", ref: "N/A" },
+                        { name: "Filtre à air Exter", ref: "H99Y" },
+                        { name: "Huile moteur 15w40 Urania LD7", ref: "6 Litres" }
+                    ]
+                },
+                "Vidange Tracteur NH": {
+                    image: "https://axyqwmwryo.cloudimg.io/v7/https://cdn.webmag.io/cnhi-test-marcin-dobrzynski/2021/03/T8_Tier4B_Service_1615221934182.png?ci_url_encoded=1&org_if_sml=1&alt=media&func=bound&w=600&q=10",
+                    parts: [
+                        { name: "Filtre à huile", ref: "84222017" },
+                        { name: "Filtre à gasoil", ref: "84214564" },
+                        { name: "Filtre à air", ref: "86982523" },
+                        { name: "Filtre à air", ref: "84217229" }
+                    ]
+                },
+                "Entretien IVECO 35c15": {
+                    image: "https://apresvente.ivecoest.com/public/img/medium/photoatelierdailyjpg_6646fb464b42b0.97619212.jpg",
+                    parts: [
+                        { name: "Filtre à huile", ref: "2992188" },
+                        { name: "Filtre à gasoil", ref: "2992662" },
+                        { name: "Filtre à gasoil", ref: "500086009" },
+                        { name: "Filtre à air", ref: "5801317097" },
+                        { name: "Filtre climatiseur", ref: "500086309" },
+                        { name: "Filtre reniflard", ref: "5801686484" },
+                        { name: "Huile moteur 15w40 Urania LD7", ref: "7 Litres" }
+                    ]
+                },
+                "Entretien IVECO Eurocargo": {
+                    // MODIFICATION: Image ajoutée
+                    image: "https://www.sotradies.tn/wp-content/uploads/2017/11/20936326522_6928a1e006_o-1.jpg",
+                    parts: [
+                        { name: "Filtre à huile", ref: "2992242" },
+                        { name: "Filtre à gasoil", ref: "2992241" },
+                        { name: "Filtre à gasoil", ref: "2997374" },
+                        { name: "Filtre à air", ref: "42558097" },
+                        { name: "Huile moteur 15w40 Urania LD7", ref: "13 Litres" }
+                    ]
+                },
+                "Entretien Patins de Frein": {
+                    // MODIFICATION: Image ajoutée
+                    image: "https://img.itautomotive.fr/image/?url=cdn.bymycar.eu/fr-webzine/wp-content/uploads/medias/temoin-usure-plaquettes-frein.jpg&apikey=e0510064ccc8c67347072c7ad88097c9&q=75&output=webp&fit=outside",
+                    parts: [
+                        { name: "PATIN AV", ref: "1906401" },
+                        { name: "INDUCATEUR", ref: "500054697" },
+                        { name: "PATIN AR", ref: "42555917" },
+                        { name: "INDUCATEUR", ref: "500054693" }
+                    ]
+                }
+            },
+            // --- NOUVELLE BASE DE DONNÉES POUR LE CATALOGUE PIÈCES (selon photo) ---
+            catalogPiecesData: [
+                 { id: 'filtres', name: 'Filtres', image: 'https://autopart.tn/categorie/filtres.webp', subParts: [ { name: 'Filtre à huile', image: 'https://autopart.tn/produits/filtre-a-huile.webp' }, { name: 'Filtre à air', image: 'https://autopart.tn/produits/filtre-a-air.webp' }, { name: 'Filtre à carburant', image: 'https://autopart.tn/produits/filtre-a-carburant.webp' }, { name: 'Filtre habitacle', image: 'https://autopart.tn/produits/filtre-habitacle.webp' } ] },
+                 { id: 'freinage', name: 'Freinage', image: 'https://autopart.tn/categorie/freinage.webp', subParts: [ { name: 'Plaquettes de frein', image: 'https://autopart.tn/produits/kit-de-plaquettes-de-frein.webp'}, { name: 'Disque de frein', image: 'https://autopart.tn/produits/disque-de-frein.webp'}, { name: 'Capteur ABS', image: 'https://autopart.tn/produits/capteur-abs.webp'} ] },
+                 { id: 'courroie', name: 'Courroie, tendeur et chaine', image: 'https://autopart.tn/categorie/courroie.webp', subParts: [ { name: 'Poulie tendeur', image: 'https://autopart.tn/produits/poulie-tendeur-distribution.webp'}, { name: 'Poulie', image: 'https://autopart.tn/produits/poulie-villebrequin.webp'}, { name: 'Courroie distribution', image: 'https://autopart.tn/produits/courroie-distribution.webp'} ] },
+                 { id: 'allumage', name: 'Allumage', image: 'https://autopart.tn/categorie/allumage.webp', subParts: [ { name: 'Bougie de préchauffage', image: 'https://autopart.tn/produits/bougie-prechauffage.webp'} ] },
+                 { id: 'direction', name: 'Direction et Trains roulants', image: 'https://autopart.tn/categorie/trains.webp', subParts: [ { name: 'Rotule de suspension', image: 'https://autopart.tn/produits/rotule-suspension.webp'}, { name: 'Kit de roulement', image: 'https://autopart.tn/produits/roulement-roue.webp'}, { name: 'Rotule de direction', image: 'https://autopart.tn/produits/rotule-direction.webp'}, { name: 'Silent bloc', image: 'https://autopart.tn/produits/silentbloc.webp'} ] },
+                 { id: 'embrayage', name: 'Embrayage', image: 'https://autopart.tn/categorie/embrayage.webp', subParts: [ { name: 'Butée embrayage', image: 'https://autopart.tn/produits/butee-embrayage.webp'}, { name: 'Volant moteur', image: 'https://autopart.tn/produits/volant-moteur.webp'} ] },
+                 { id: 'moteur', name: 'Moteur', image: 'https://autopart.tn/categorie/moteur.webp', subParts: [ { name: 'Support moteur', image: 'https://autopart.tn/produits/support-moteur.webp'}, { name: 'Pompe à eau', image: 'https://autopart.tn/produits/pompe-a-eau.webp'}, { name: 'Pompe hydraulique', image: 'https://autopart.tn/produits/pompe-assiste.webp'}, { name: "Joint d'étanchéité", image: 'https://autopart.tn/produits/joint-carter.webp'} ] },
+                 { id: 'eclairage', name: 'Eclairage', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQu83dnyaGVv-eskOxKmR2nb_vwLt6dW7YSkA&s', subParts: [ { name: 'Phare avant', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQu83dnyaGVv-eskOxKmR2nb_vwLt6dW7YSkA&s'} ] },
+                 { id: 'demarrage', name: 'Démarrage électrique', image: 'https://www.autospark.fr/wp-content/uploads/2014/07/Pi%C3%A8ces-de-D%C3%A9marreur.png', subParts: [ { name: 'Démarreur', image: 'https://autopart.tn/produits/demarreur.webp'}, { name: 'Poulie roue libre', image: 'https://autopart.tn/produits/poulie-alternateur.webp'} ] },
+                 { id: 'capteurs', name: 'Capteurs et sondes', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtl7hOyBYfv_CWv7eP6ebyj5FqE3vGHjwIHA&s', subParts: [ { name: 'Sonde de température', image: 'https://autopart.tn/produits/sonde-temperature.webp'}, { name: 'Capteur vilebrequin', image: 'https://autopart.tn/produits/capteur-vilebrequin.webp'}, { name: 'Capteur arbres a cames', image: 'https://autopart.tn/produits/capteur-arbre-a-came.webp'}, { name: "Débitmètre d'air", image: 'https://autopart.tn/produits/debimetre.webp'} ] },
+                 { id: 'carrosserie', name: 'Carrosserie', image: 'https://autopart.tn/categorie/carosserie.webp', subParts: [ { name: 'Essuie glace', image: 'https://autopart.tn/produits/balai-essuie-glace.webp'}, { name: 'Pompe lave glace', image: 'https://autopart.tn/produits/pompe-eau-lave-glace.webp'} ] },
+                 { id: 'refroidissement', name: 'Refroidissement moteur', image: 'https://autopart.tn/categorie/refroidissement.webp', subParts: [ { name: 'Radiateur à huile', image: 'https://autopart.tn/produits/radiateur-huile.webp'}, { name: 'Intercooler', image: 'https://autopart.tn/produits/intercooler.webp'}, { name: "Thermostat d'eau", image: 'https://autopart.tn/produits/thermostat.webp'}, { name: "Radiateur d'eau", image: 'https://autopart.tn/produits/radiateur-eau.webp'} ] },
+                 { id: 'transmission', name: 'Cardan et Transmission', image: 'https://autopart.tn/categorie/cardan-transmission.webp', subParts: [ { name: 'Cable vitesse', image: 'https://autopart.tn/produits/cable-vitesse.webp'} ] },
+                 { id: 'climatisation', name: 'Climatisation', image: 'https://autopart.tn/categorie/climatisation.webp', subParts: [ { name: 'Radiateur', image: 'https://autopart.tn/produits/radiateur-climatisation.webp'} ] },
+                 { id: 'lubrifiant', name: 'Lubrifiant', image: 'https://autopart.tn/categorie/lubrifiant.webp', subParts: [ { name: 'Huile moteur', image: 'https://autopart.tn/produits/huile-moteur.webp'}, { name: 'Antigel', image: 'https://autopart.tn/produits/antigel.webp'}, { name: 'Huile boite vitesse et pont', image: 'https://autopart.tn/produits/huile-boite-et-pont.webp'} ] },
+            ]
+        };
+
+        const entretienContainer = document.getElementById('sav-entretien');
+        const piecesContainer = document.getElementById('sav-pieces');
+        const rapideContainer = document.getElementById('sav-rapide');
+
+        // --- FONCTIONS DE GÉNÉRATION HTML ---
+        function generateEntretienHTML() {
+             return `
+                 <div class="text-center mb-12">
+                     <h2 class="text-3xl md:text-4xl font-bold" style="color: var(--blue-primary);">Nos Forfaits Entretien</h2>
+                     <p class="text-gray-600 mt-3 text-lg">Des services experts pour maintenir votre véhicule en condition optimale.</p>
+                 </div>
+                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                     ${savData.entretien.map((service, index) => `
+                         <div class="entretien-bg-card ${index % 2 !== 0 ? 'align-right' : ''}" style="background-image: url('${service.image}')" onerror="this.onerror=null;this.src='https://placehold.co/800x600/cccccc/FFFFFF?text=Service';">
+                               <div class="content-wrapper">
+                                   <div class="max-w-sm text-shadow text-${index % 2 === 0 ? 'left' : 'right'}">
+                                       <h3 class="text-3xl font-bold mb-3">${service.name}</h3>
+                                       <p class="text-lg opacity-90">${service.description}</p>
+                                   </div>
+                             </div>
+                         </div>
+                     `).join('')}
+                 </div>
+             `;
+        }
+
+        function generateServiceRapideHTML() {
+            const getIconForModel = (modelName) => {
+                const lowerCaseName = modelName.toLowerCase();
+                if (lowerCaseName.includes('patin')) return 'fa-car-burst';
+                if (lowerCaseName.includes('tracteur')) return 'fa-tractor';
+                if (lowerCaseName.includes('chariot')) return 'fa-forklift';
+                return 'fa-truck'; // Icône par défaut
+            };
+
+            return `
+                 <div class="text-center mb-12">
+                     <h2 class="text-3xl md:text-4xl font-bold" style="color: var(--blue-primary);">Service Rapide : Pièces Essentielles</h2>
+                     <p class="text-gray-600 mt-3 text-lg">Retrouvez ici les références les plus courantes pour un entretien rapide.</p>
+                 </div>
+                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                     ${Object.keys(savData.serviceRapide).map(modelName => {
+                         const service = savData.serviceRapide[modelName];
+                         const hasImage = service.image && service.image.length > 0;
+                         const cardClass = hasImage ? 'service-rapide-card' : 'service-rapide-card no-bg shadow-lg border border-gray-100';
+                         const style = hasImage ? `style="background-image: url('${service.image}')"` : '';
+                         const titleColor = hasImage ? 'text-white' : 'text-[var(--blue-primary)]';
+                         const titleIconColor = hasImage ? 'text-blue-300' : 'text-blue-400';
+                         const listBgColor = hasImage ? 'bg-white/10 hover:bg-white/20' : 'hover:bg-gray-50';
+                         const itemTextColor = hasImage ? 'text-gray-200' : 'text-gray-700';
+                         const refBgColor = hasImage ? 'bg-white/20' : 'bg-gray-100';
+                         const refTextColor = hasImage ? 'text-white' : 'text-gray-900';
+
+                         return `
+                               <div class="${cardClass}" ${style}>
+                                   <div class="card-content">
+                                       <h3 class="text-xl font-bold mb-5 pb-4 border-b ${hasImage ? 'border-white/20' : 'border-blue-100'} flex items-center ${titleColor}">
+                                           <i class="fas ${getIconForModel(modelName)} mr-4 ${titleIconColor}"></i> ${modelName}
+                                       </h3>
+                                       <ul class="space-y-2 flex-grow">
+                                           ${service.parts.map(piece => `
+                                               <li class="flex justify-between items-center p-3 rounded-lg ${listBgColor} transition-colors duration-200">
+                                                   <span class="font-medium ${itemTextColor} text-sm">${piece.name}</span>
+                                                   <span class="font-semibold ${refTextColor} ${refBgColor} py-1 px-3 rounded-full text-xs">Réf: ${piece.ref}</span>
+                                               </li>
+                                           `).join('')}
+                                       </ul>
+                                   </div>
+                               </div>
+                           `;
+                     }).join('')}
+                 </div>
+             `;
+        }
+        
+        // --- NOUVELLES FONCTIONS POUR LE CATALOGUE DE PIÈCES (selon photo) ---
+        function generatePiecesCatalog() {
+            const catalogGrid = document.createElement('div');
+            catalogGrid.className = 'catalog-grid';
+            catalogGrid.id = 'catalog-grid-main';
+
+            savData.catalogPiecesData.forEach((category, index) => {
+                const card = document.createElement('div');
+                card.className = 'catalog-card';
+                card.id = `cat-card-${category.id}`;
+                card.onclick = () => toggleSubCategory(card, category.id);
+                
+                card.innerHTML = `
+                    <img src="${category.image}" alt="${category.name}" onerror="this.onerror=null;this.src='https://i.ibb.co/Vv9Xf1t/moteur.png';">
+                    <span class="font-semibold text-gray-800 text-sm">${category.name}</span>
+                `;
+                catalogGrid.appendChild(card);
+            });
+
+            const titleHTML = `
+                 <div class="text-center mb-12">
+                     <h2 class="text-3xl md:text-4xl font-bold" style="color: var(--blue-primary);">Catalogue de Pièces de Rechange</h2>
+                     <p class="text-gray-600 mt-3 text-lg">Sélectionnez une catégorie pour découvrir nos pièces.</p>
+                 </div>
+            `;
+            
+            piecesContainer.innerHTML = titleHTML;
+            piecesContainer.appendChild(catalogGrid);
+        }
+        
+        function toggleSubCategory(element, categoryId) {
+            const category = savData.catalogPiecesData.find(cat => cat.id === categoryId);
+            const mainGrid = document.getElementById('catalog-grid-main');
+            const allCards = Array.from(mainGrid.children).filter(child => child.classList.contains('catalog-card'));
+            
+            // Remove any existing sub-category container
+            const existingSubContainer = document.getElementById('sub-cat-container');
+            if (existingSubContainer) {
+                existingSubContainer.remove();
+            }
+
+            // Deactivate all cards
+            allCards.forEach(card => card.classList.remove('active'));
+
+            // If the clicked card was the one with the open container, we just close it
+            if (element.id === window.activeCatalogCardId) {
+                window.activeCatalogCardId = null;
+                return;
+            }
+
+            // Activate the new card
+            element.classList.add('active');
+            window.activeCatalogCardId = element.id;
+
+            // Create the new sub-category container
+            const subContainer = document.createElement('div');
+            subContainer.id = 'sub-cat-container';
+            subContainer.className = 'sub-category-container';
+            
+            if (category && category.subParts.length > 0) {
+                const subPartsHTML = category.subParts.map((part, index) => `
+                    <div class="sub-category-card" style="animation-delay: ${index * 50}ms;">
+                        <img src="${part.image}" alt="${part.name}" onerror="this.onerror=null;this.src='https://placehold.co/150x150/cccccc/ffffff?text=Image';">
+                        <span class="font-semibold text-sm text-gray-700">${part.name}</span>
+                    </div>
+                `).join('');
+                subContainer.innerHTML = `<div class="sub-category-grid">${subPartsHTML}</div>`;
+            } else {
+                subContainer.innerHTML = '<p class="text-center text-gray-600 py-4">Aucune sous-catégorie disponible pour le moment.</p>';
+            }
+
+            // Find where to insert the container
+            const cardIndex = allCards.findIndex(card => card.id === element.id);
+            const columns = window.innerWidth >= 1024 ? 6 : window.innerWidth >= 768 ? 4 : window.innerWidth >= 640 ? 3 : 2;
+            const endOfRowIndex = (Math.floor(cardIndex / columns) + 1) * columns;
+            const insertAfterElement = allCards[endOfRowIndex - 1] || allCards[allCards.length - 1];
+            
+            if (insertAfterElement) {
+                insertAfterElement.after(subContainer);
+            } else {
+                mainGrid.appendChild(subContainer);
+            }
+
+            // Force browser to recalculate layout, then add 'open' class for transition
+            setTimeout(() => {
+                subContainer.classList.add('open');
+            }, 10);
+        }
+
+
+        // --- GESTION DE L'AFFICHAGE ET DES ONGLETS ---
+        function showSavContent(tab) {
+            const tabs = ['entretien', 'rapide', 'pieces'];
+            tabs.forEach(t => {
+                document.getElementById(`btn-${t}`).classList.remove('active');
+                document.getElementById(`sav-${t}`).classList.remove('active');
+            });
+            document.getElementById(`btn-${tab}`).classList.add('active');
+            document.getElementById(`sav-${tab}`).classList.add('active');
+        }
+
+        // --- INITIALISATION DE LA PAGE ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialisation contenu SAV
+            if (entretienContainer && piecesContainer && rapideContainer) {
+                entretienContainer.innerHTML = generateEntretienHTML();
+                rapideContainer.innerHTML = generateServiceRapideHTML();
+                generatePiecesCatalog(); // Affiche le nouveau catalogue
+            }
+
+            // Script pour les animations au défilement
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.2 });
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+            // --- LOGIQUE DU CHATBOT AMÉLIORÉE ---
+            const chatbotFab = document.getElementById('chatbot-fab');
+            const chatbotWindow = document.getElementById('chatbot-window');
+            const closeBtn = document.getElementById('chatbot-header-close');
+            const sendBtn = document.getElementById('chatbot-send-btn');
+            const chatbotInput = document.getElementById('chatbot-input');
+            const messagesContainer = document.getElementById('chatbot-messages');
+
+            const toggleChatbot = () => {
+                chatbotWindow.classList.toggle('hidden');
+                if (!chatbotWindow.classList.contains('hidden') && messagesContainer.children.length === 0) {
+                    addBotMessage("Bonjour ! Je suis l'assistant virtuel de HPA. Comment puis-je vous aider ?");
+                }
+            }
+
+            chatbotFab.addEventListener('click', toggleChatbot);
+            closeBtn.addEventListener('click', toggleChatbot);
+
+            const addMessage = (text, type) => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${type}-message`;
+                messageDiv.textContent = text;
+                messagesContainer.appendChild(messageDiv);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+
+            const addBotMessage = (text) => {
+                setTimeout(() => addMessage(text, 'bot'), 500);
+            }
+
+            const handleSendMessage = () => {
+                const userInput = chatbotInput.value.trim();
+                if (userInput === '') return;
+                addMessage(userInput, 'user');
+                chatbotInput.value = '';
+                getBotResponse(userInput);
+            }
+
+            const botResponses = [
+                {
+                    keywords: ['prix', 'coûte', 'tarif', 'coût'],
+                    handler: (input) => {
+                        if (input.includes('pièce') || input.includes('filtre') || input.includes('frein') || input.includes('rechange') || input.includes('patin')) {
+                            addBotMessage("Pour connaître le prix d'une pièce spécifique, nous vous invitons à faire une demande auprès de notre administration. Nos conseillers vous fourniront un devis précis dans les plus brefs délais.");
+                        } else if (input.includes('véhicule') || input.includes('camion') || input.includes('daily') || input.includes('eurocargo') || input.includes('s-way')) {
+                            addBotMessage("Les prix de nos véhicules sont disponibles sur catalogue. Je vous invite à télécharger nos brochures depuis la page ou à nous contacter pour recevoir une offre personnalisée.");
+                        } else {
+                            addBotMessage("Pour obtenir un prix, veuillez préciser si vous parlez d'une pièce de rechange ou d'un véhicule. Pour toute demande de devis, le mieux est de contacter directement notre service commercial au +216 73 123 456.");
+                        }
+                    }
+                },
+                {
+                    keywords: ['où', 'adresse', 'localis', 'trouve', 'situe'],
+                    handler: () => addBotMessage("Nous sommes situés à Frina, Monastir, en Tunisie. Vous trouverez un plan d'accès et nos coordonnées complètes en bas de page.")
+                },
+                {
+                    keywords: ['horaire', 'ouvert', 'fermé', 'heure'],
+                    handler: () => addBotMessage("Nos horaires d'ouverture sont du Lundi au Vendredi, de 8h00 à 18h00, et le Samedi de 8h00 à 13h00. Nous sommes fermés le Dimanche.")
+                },
+                {
+                    keywords: ['rdv', 'rendez-vous', 'réserver'],
+                    handler: () => addBotMessage("Pour prendre un rendez-vous à l'atelier, le plus simple est de nous appeler directement au +216 73 123 456. Nous trouverons un créneau qui vous arrange.")
+                },
+                {
+                    keywords: ['garantie', 'garanti'],
+                    handler: () => addBotMessage("Toutes nos pièces d'origine IVECO bénéficient de la garantie constructeur. Pour plus de détails sur la durée et les conditions, n'hésitez pas à demander à nos conseillers lors de votre achat.")
+                },
+                {
+                    keywords: ['entretien', 'vidange', 'révision'],
+                    handler: () => addBotMessage("Nous proposons plusieurs forfaits d'entretien. Je vous invite à consulter la section 'Entretien' ici sur la page pour plus de détails, ou à nous appeler.")
+                },
+                {
+                    keywords: ['contact', 'téléphone', 'mail', 'numéro'],
+                    handler: () => addBotMessage("Vous pouvez nous joindre par téléphone au +216 73 123 456 ou par email à contact@hpa.tn. Toutes nos informations sont disponibles en bas de la page.")
+                },
+                {
+                    keywords: ['daily', 'eurocargo', 's-way', 'trakker', 't-way', 'stralis', 'heli', 'nh'],
+                    handler: (input) => {
+                        const model = response.keywords.find(kw => input.includes(kw));
+                        addBotMessage(`Oui, nous proposons des pièces et services pour la gamme ${model}. Vous pouvez utiliser notre catalogue de pièces, la section Service Rapide ou nous contacter pour plus d'informations.`)
+                    }
+                },
+                 {
+                    keywords: ['bonjour', 'salut', 'salam'],
+                    handler: () => addBotMessage("Bonjour ! Je suis l'assistant virtuel de HPA. Comment puis-je vous aider aujourd'hui ?")
+                },
+                {
+                    keywords: ['merci', 'remercie'],
+                    handler: () => addBotMessage("De rien ! C'est un plaisir de vous aider. N'hésitez pas si vous avez d'autres questions.")
+                }
+            ];
+
+            function getBotResponse(userInput) {
+                const input = userInput.toLowerCase();
+
+                for (const response of botResponses) {
+                    if (response.keywords.some(keyword => input.includes(keyword))) {
+                        response.handler(input);
+                        return; // Stopper après avoir trouvé une réponse
+                    }
+                }
+
+                // Réponse par défaut si aucune correspondance n'est trouvée
+                addBotMessage("Je ne suis pas certain d'avoir compris. Pour toute question spécifique (devis, disponibilité d'une pièce précise...), le plus simple est de contacter notre service client au +216 73 123 456. Ils se feront un plaisir de vous aider.");
+            }
+
+            sendBtn.addEventListener('click', handleSendMessage);
+            chatbotInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    handleSendMessage();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

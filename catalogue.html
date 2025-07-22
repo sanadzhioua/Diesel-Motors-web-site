@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalogue Prestige - HPA Monastir | IVECO, New Holland, HELI</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Teko:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --blue-primary: #002D62; /* Bleu IVECO Foncé */
+            --blue-accent: #0052A5; /* Bleu IVECO Moyen */
+            --red-accent: #D8292F;   /* Rouge IVECO */
+            --red-hover: #B11E24;   /* Rouge plus foncé pour survol */
+            --text-dark: #1F2937;
+            --text-light: #6B7280;
+            --bg-light: #F4F6F8;
+            --bg-white: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3, .font-teko {
+            font-family: 'Teko', sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        /* --- Style pour la barre de navigation qui disparaît/apparaît --- */
+        #main-header {
+            transition: transform 0.3s ease-in-out;
+        }
+        .header-hidden {
+            transform: translateY(-100%);
+        }
+        /* --- Fin du style pour la barre de navigation --- */
+
+        .hero-section {
+            background-image: url('https://www.iveco.com/africa-mideast-en/-/media/IVECOdotcom/Italy/1020_IVECO_Banner_Range_1920x1080.jpg?h=1080&iar=0&w=1920&rev=ce9f715faf13495eb23b63457f2f8b84');
+            background-size: cover;
+            background-position: center 70%;
+            background-attachment: fixed;
+        }
+
+        .hero-overlay {
+            background: linear-gradient(to top, rgba(0, 45, 98, 0.9) 0%, rgba(0, 45, 98, 0.6) 50%, rgba(0, 45, 98, 0.3) 100%);
+        }
+
+        .section-header-line {
+            width: 80px;
+            height: 3px;
+            background-color: var(--red-accent);
+            margin: 1rem auto;
+            border-radius: 2px;
+        }
+
+        /* --- NOUVEAU STYLE DE CARTE PRODUIT --- */
+        .product-card {
+            height: 350px; /* Taille augmentée */
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            color: white;
+        }
+        
+        .product-card.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.2);
+            border-color: var(--red-accent);
+        }
+        
+        .product-card:hover .product-card-overlay {
+             background: linear-gradient(to top, rgba(0, 45, 98, 0.95) 10%, rgba(0, 0, 0, 0.2) 80%);
+        }
+
+        .product-card-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0, 45, 98, 0.9) 0%, rgba(0, 0, 0, 0.1) 60%);
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            transition: background 0.4s ease;
+        }
+
+        .product-card-title {
+            font-size: 1.8rem; /* Taille augmentée */
+            line-height: 1.2;
+            font-weight: 600;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+        }
+        
+        .product-card-subtitle {
+            font-size: 0.9rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            opacity: 0.8;
+        }
+        /* --- FIN DU NOUVEAU STYLE --- */
+        
+        .product-card-price {
+           display: none;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-align: center;
+            border: 1px solid transparent;
+        }
+        .btn-red {
+             background-color: var(--red-accent);
+             color: white;
+             box-shadow: 0 4px 15px rgba(216, 41, 47, 0.2);
+        }
+        .btn-red:hover {
+            background-color: var(--red-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(216, 41, 47, 0.3);
+        }
+        .btn-primary {
+             background-color: var(--blue-accent);
+             color: white;
+        }
+         .btn-primary:hover {
+            background-color: var(--blue-primary);
+        }
+        .btn i { margin-right: 0.5rem; }
+
+        .modal-overlay.hidden { display: none; }
+        .modal-content { transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); }
+        .view-hidden { display: none; }
+        .cursor-zoom-in { cursor: zoom-in; }
+
+        /* Styles de la nouvelle fiche technique */
+        .spec-grid-item {
+            background-color: #FDFDFD;
+            border-left: 3px solid var(--red-accent);
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            transition: all 0.3s ease;
+        }
+        .spec-grid-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        /* Styles du configurateur */
+        .config-option-group { border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 1.5rem; overflow: hidden; }
+        .config-option-group legend { font-size: 1.25rem; font-weight: 600; padding: 0.5rem 1rem; background-color: var(--bg-light); color: var(--blue-primary); width: 100%; }
+        .config-choice { display: block; padding: 0.75rem 1rem; border-top: 1px solid #e5e7eb; cursor: pointer; transition: background-color 0.2s ease; }
+        .config-choice:hover { background-color: #e6f0ff; }
+        .config-choice input { margin-right: 0.75rem; }
+        .config-choice .price-tag { display: none; }
+
+        /* Styles du Chatbot */
+        #chatbot-fab { position: fixed; bottom: 2rem; right: 2rem; width: 60px; height: 60px; background-color: var(--blue-accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; box-shadow: 0 4px 20px rgba(0,0,0,0.2); transition: all 0.3s ease; z-index: 100; }
+        #chatbot-fab:hover { transform: scale(1.1); background-color: var(--blue-primary); }
+        #chatbot-window { position: fixed; bottom: 6.5rem; right: 2rem; width: 350px; max-width: 90vw; height: 500px; max-height: 70vh; background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: flex; flex-direction: column; overflow: hidden; transform-origin: bottom right; transition: all 0.3s ease-out; z-index: 99; }
+        #chatbot-window.hidden { transform: scale(0); opacity: 0; }
+        #chatbot-header { background: var(--blue-primary); color: white; padding: 1rem; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+        #close-chatbot { background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
+        #chatbot-messages { flex-grow: 1; padding: 1rem; overflow-y: auto; background-color: #f4f7f9; }
+        .chat-message { margin-bottom: 0.75rem; display: flex; flex-direction: column; max-width: 85%; }
+        .chat-message p { padding: 0.75rem; border-radius: 12px; line-height: 1.4; }
+        .user-message { align-self: flex-end; align-items: flex-end; }
+        .user-message p { background-color: var(--blue-accent); color: white; border-bottom-right-radius: 0; }
+        .bot-message { align-self: flex-start; align-items: flex-start; }
+        .bot-message p { background-color: #e5e7eb; color: var(--text-dark); border-bottom-left-radius: 0; }
+        #chatbot-input-container { border-top: 1px solid #e5e7eb; padding: 0.75rem; display: flex; background: white; }
+        #chatbot-input { flex-grow: 1; border: 1px solid #ccc; border-radius: 20px; padding: 0.5rem 1rem; outline: none; }
+        #chatbot-send { background-color: var(--blue-accent); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; margin-left: 0.5rem; cursor: pointer; font-size: 18px; }
+        .chat-action-btn {
+            background-color: var(--blue-accent);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-top: 8px;
+            transition: background-color 0.2s;
+        }
+        .chat-action-btn:hover {
+            background-color: var(--blue-primary);
+        }
+        
+        .text-red-accent { color: var(--red-accent); }
+        .hover\:text-red-accent:hover { color: var(--red-accent); }
+        .border-red-accent { border-color: var(--red-accent); }
+
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- En-tête (Header) -->
+    <header id="main-header" class="bg-white shadow-md py-4 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between sticky top-0 z-50">
+        <div class="flex-shrink-0 mb-4 md:mb-0">
+            <a href="#" onclick="showCatalogue()" class="flex items-center space-x-3">
+                <!-- MODIFIÉ : Logo rectangulaire -->
+                <!-- Pour que le logo s'affiche, assurez-vous que le fichier "logo.jpg" se trouve dans le même dossier que ce fichier HTML -->
+                <img src="logo.jpg" alt="Logo HPA" class="h-16 w-32 object-contain" onerror="this.onerror=null;this.src='https://placehold.co/128x64/eeeeee/1F2937?text=Logo+HPA';this.alt='Logo HPA non trouvé';">
+                <span class="text-4xl font-teko tracking-wider" style="color: var(--blue-primary);">HPA MONASTIR</span>
+            </a>
+        </div>
+        <nav class="flex-grow">
+            <ul class="flex flex-wrap justify-center md:justify-end space-x-6 md:space-x-8 text-lg font-medium text-gray-700">
+                <li><a href="acceuil.html" class="hover:text-red-accent transition duration-300">Accueil</a></li>
+                <li><a href="sav.html" class="hover:text-red-accent transition duration-300">SAV</a></li>
+                <li><a href="#footer" class="hover:text-red-accent transition duration-300">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Vue Catalogue -->
+    <main id="catalogue-view">
+        <section class="hero-section relative">
+            <div class="hero-overlay py-40 sm:py-64">
+                <div class="container mx-auto px-6 text-center text-white">
+                    <h1 class="text-5xl md:text-7xl font-bold tracking-tight uppercase">L'excellence a une nouvelle référence</h1>
+                    <p class="text-lg md:text-2xl text-gray-200 mt-4 max-w-4xl mx-auto font-light">Découvrez notre sélection de véhicules conçus pour la performance, la fiabilité et le succès de votre entreprise.</p>
+                     <a href="#iveco" class="btn btn-red mt-12 text-xl shadow-lg"><i class="fas fa-arrow-down"></i> Explorer nos gammes</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section IVECO -->
+        <section id="iveco" class="py-24 bg-white">
+            <div class="container mx-auto px-6">
+                <img src="https://cdn.worldvectorlogo.com/logos/iveco.svg" alt="Logo IVECO" class="h-24 mx-auto mb-4">
+                <p class="text-center max-w-3xl mx-auto text-lg text-gray-600 mb-4">La puissance et la polyvalence au service des professionnels les plus exigeants. Des utilitaires légers aux poids lourds, IVECO est le partenaire de votre croissance.</p>
+                <div class="section-header-line"></div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-12 mt-16">
+                    <!-- IVECO Cards will be injected here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Section HELI -->
+        <section id="heli" class="py-24" style="background-color: var(--bg-light);">
+            <div class="container mx-auto px-6">
+                 <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Heli_logo.jpg" alt="Logo HELI" class="h-20 mx-auto mb-4 border rounded-md">
+                 <p class="text-center max-w-3xl mx-auto text-lg text-gray-600 mb-4">Solutions de manutention intelligentes et robustes. Optimisez votre logistique avec les chariots élévateurs et transpalettes HELI, leader mondial de la performance.</p>
+                 <div class="section-header-line"></div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-12 mt-16">
+                      <!-- HELI Cards will be injected here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Section NEW HOLLAND -->
+        <section id="newholland" class="py-24 bg-white">
+            <div class="container mx-auto px-6">
+                <!-- New Holland Agriculture -->
+                <div class="mb-20">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQORJSHLsm3TPwxud6I_gViv1zaj1gxVZvfw&s" alt="Logo New Holland Agriculture" class="h-24 mx-auto mb-4">
+                    <p class="text-center max-w-3xl mx-auto text-lg text-gray-600 mb-4">Façonnez l'avenir de l'agriculture avec des équipements de pointe. New Holland Agriculture allie innovation, efficacité et confort pour maximiser votre rendement.</p>
+                    <div class="section-header-line"></div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12 mt-16" id="nh-agri-grid">
+                        <!-- New Holland Agriculture Cards will be injected here -->
+                    </div>
+                </div>
+
+                <!-- New Holland Construction -->
+                <div>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpS9bBfICxTqYpVoVUyq8EuxvxvQuqFJqUyg&s" alt="Logo New Holland Construction" class="h-24 mx-auto mb-4">
+                     <p class="text-center max-w-3xl mx-auto text-lg text-gray-600 mb-4">Construisez sur des bases solides. Les engins New Holland Construction sont réputés pour leur puissance, leur précision et leur durabilité sur tous les chantiers.</p>
+                    <div class="section-header-line"></div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12 mt-16" id="nh-const-grid">
+                        <!-- New Holland Construction Cards will be injected here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Services -->
+        <section id="services" class="py-24" style="background-color: var(--bg-light);">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-5xl font-teko font-bold mb-4" style="color: var(--blue-primary);">NOS ENGAGEMENTS</h2>
+                <p class="text-center max-w-3xl mx-auto text-lg text-gray-600 mb-4">Plus qu'un concessionnaire, un véritable partenaire à vos côtés.</p>
+                <div class="section-header-line"></div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mt-16">
+                    <div class="p-8 bg-white rounded-lg shadow-sm">
+                        <i class="fas fa-hand-holding-dollar fa-3x mb-4" style="color: var(--red-accent);"></i>
+                        <h3 class="text-2xl font-teko font-semibold mb-2">Financement sur Mesure</h3>
+                        <p class="text-gray-600">Des solutions de leasing et de crédit adaptées à votre budget et à votre activité pour acquérir vos équipements en toute sérénité.</p>
+                    </div>
+                    <div class="p-8 bg-white rounded-lg shadow-sm">
+                        <i class="fas fa-tools fa-3x mb-4" style="color: var(--red-accent);"></i>
+                        <h3 class="text-2xl font-teko font-semibold mb-2">Service Après-Vente Expert</h3>
+                        <p class="text-gray-600">Nos techniciens formés par les constructeurs assurent l'entretien et la réparation de vos véhicules avec des pièces d'origine garanties.</p>
+                    </div>
+                    <div class="p-8 bg-white rounded-lg shadow-sm">
+                        <i class="fas fa-cogs fa-3x mb-4" style="color: var(--red-accent);"></i>
+                        <h3 class="text-2xl font-teko font-semibold mb-2">Personnalisation et Carrosserie</h3>
+                        <p class="text-gray-600">Nous adaptons votre véhicule à vos besoins spécifiques : bennes, fourgons, plateaux, équipements spéciaux. Parlez-nous de votre projet.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Témoignages -->
+        <section id="testimonials" class="py-24 bg-white">
+            <div class="container mx-auto px-6 text-center">
+                 <h2 class="text-5xl font-teko font-bold mb-4" style="color: var(--blue-primary);">LA CONFIANCE DE NOS CLIENTS</h2>
+                 <p class="text-center max-w-3xl mx-auto text-lg text-gray-600 mb-4">Ils nous ont fait confiance, découvrez pourquoi.</p>
+                 <div class="section-header-line"></div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
+                    <div class="p-8 bg-gray-50 rounded-lg text-left relative">
+                        <i class="fas fa-quote-left fa-2x text-red-accent opacity-20 absolute top-4 left-4"></i>
+                        <p class="mb-4 italic">"Le service SAV de HPA est exceptionnel. Mon IVECO Daily est toujours opérationnel, ce qui est crucial pour mon activité de livraison. Une équipe réactive et professionnelle."</p>
+                        <p class="font-bold text-right">- Ali M., Gérant de société de transport</p>
+                    </div>
+                    <div class="p-8 bg-gray-50 rounded-lg text-left relative">
+                        <i class="fas fa-quote-left fa-2x text-red-accent opacity-20 absolute top-4 left-4"></i>
+                        <p class="mb-4 italic">"J'ai acheté mon tracteur New Holland chez HPA et j'ai été très bien conseillé. Ils ont compris mes besoins et m'ont proposé le modèle parfait pour mes terres."</p>
+                        <p class="font-bold text-right">- Fethi J., Agriculteur à Kairouan</p>
+                    </div>
+                    <div class="p-8 bg-gray-50 rounded-lg text-left relative">
+                        <i class="fas fa-quote-left fa-2x text-red-accent opacity-20 absolute top-4 left-4"></i>
+                        <p class="mb-4 italic">"Les chariots HELI sont des machines fiables. Nous avons équipé tout notre entrepôt grâce aux conseils et aux solutions de financement de HPA. Je recommande vivement."</p>
+                        <p class="font-bold text-right">- Directeur Logistique, Groupe Industriel</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Vue Fiche Technique -->
+    <main id="tech-sheet-view" class="view-hidden"></main>
+
+    <!-- Footer -->
+    <footer id="footer" class="bg-blue-primary text-white" style="background-color: var(--blue-primary);">
+        <div class="container mx-auto px-6 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-gray-300">
+                <!-- Colonne 1: HPA Monastir & Social -->
+                <div>
+                    <h3 class="text-xl font-teko font-semibold mb-4 text-white uppercase">HPA Monastir</h3>
+                    <p class="mb-4">Votre partenaire de confiance pour les véhicules industriels, de construction et agricoles en Tunisie.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="hover:text-white transition"><i class="fab fa-facebook-f fa-lg"></i></a>
+                        <a href="#" class="hover:text-white transition"><i class="fab fa-instagram fa-lg"></i></a>
+                        <a href="#" class="hover:text-white transition"><i class="fab fa-linkedin-in fa-lg"></i></a>
+                    </div>
+                </div>
+                <!-- Colonne 2: Navigation -->
+                <div>
+                    <h3 class="text-xl font-teko font-semibold mb-4 text-white">Navigation</h3>
+                    <ul class="space-y-2">
+                        <li><a href="acceuil.html" class="hover:text-white transition">Accueil</a></li>
+                        <li><a href="#" onclick="showCatalogue()" class="hover:text-white transition">Catalogue</a></li>
+                        <li><a href="sav.html" class="hover:text-white transition">Service Après-Vente</a></li>
+                        <li><a href="#footer" class="hover:text-white transition">Contact</a></li>
+                    </ul>
+                </div>
+                <!-- Colonne 3: Contactez-nous -->
+                <div>
+                    <h3 class="text-xl font-teko font-semibold mb-4 text-white">Contactez-Nous</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start"><i class="fas fa-map-marker-alt fa-fw mr-3 mt-1"></i><span>Frina, Monastir, Tunisie</span></li>
+                        <li class="flex items-start"><i class="fas fa-phone fa-fw mr-3 mt-1"></i><span>+216 73 482 042</span></li>
+                        <li class="flex items-start"><i class="fas fa-envelope fa-fw mr-3 mt-1"></i><span>hpamonastir@gmail.com</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-12 border-t border-gray-700 pt-6 flex justify-between items-center text-gray-400 text-sm">
+                <span>&copy; 2024 Hammouda Pièce Auto (HPA). Tous droits réservés.</span>
+                <a href="#" onclick="document.getElementById('chatbot-fab').click(); return false;" title="Chat" class="text-2xl hover:text-white transition">
+                    <i class="fas fa-comment-dots"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- Modals (Configurator, Zoom, Chatbot) -->
+    <div id="configurator-modal" class="modal-overlay hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-[70]">
+        <div class="modal-content bg-white rounded-lg shadow-2xl w-full max-w-5xl transform transition-all duration-300 scale-95 opacity-0 flex flex-col max-h-[90vh]">
+            <div class="flex justify-between items-center p-5 border-b border-gray-200 flex-shrink-0">
+                <h2 class="text-3xl font-teko" style="color: var(--blue-primary);">Configurateur de Véhicule</h2>
+                <button id="close-configurator-modal" class="text-gray-400 hover:text-gray-700 text-3xl leading-none">&times;</button>
+            </div>
+            <div class="flex-grow overflow-y-auto">
+                <div class="flex flex-col lg:flex-row">
+                    <div id="configurator-options" class="w-full lg:w-3/5 p-6 space-y-6"></div>
+                    <div class="w-full lg:w-2/5 bg-gray-50 p-6 lg:sticky top-0">
+                        <h3 id="configurator-vehicle-name" class="text-3xl font-teko font-bold mb-4"></h3>
+                        <img id="configurator-vehicle-image" src="" alt="Image du véhicule" class="rounded-lg shadow-md mb-4 w-full h-64 object-cover">
+                        <div class="space-y-3">
+                            <div class="hidden justify-between items-center text-lg"><span>Prix de base :</span><span id="config-base-price" class="font-bold"></span></div>
+                            <hr class="my-2">
+                            <h4 class="font-bold text-lg text-gray-700">Options sélectionnées :</h4>
+                            <div id="config-options-summary" class="text-sm space-y-1 h-32 overflow-y-auto pr-2"></div>
+                            <hr class="my-3">
+                            <div class="hidden justify-between items-center text-xl font-bold" style="color: var(--blue-accent);"><span>Prix Total Configuré :</span><span id="config-total-price"></span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 bg-gray-100 border-t flex justify-end flex-shrink-0">
+                <button id="configurator-close-and-contact" class="btn btn-red">Contacter un conseiller pour cette configuration</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="zoom-modal" class="modal-overlay hidden fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[80]">
+        <button id="close-zoom-modal" class="absolute top-4 right-6 text-white text-5xl font-bold hover:text-gray-300">&times;</button>
+        <img id="zoomed-image" src="" alt="Image zoomée" class="max-w-[90vw] max-h-[90vh] object-contain">
+    </div>
+
+    <div id="chatbot-fab" title="Besoin d'aide ?"><i class="fas fa-comment-dots"></i></div>
+    <div id="chatbot-window" class="hidden">
+        <div id="chatbot-header"><span>Assistant Virtuel HPA</span><button id="close-chatbot">&times;</button></div>
+        <div id="chatbot-messages"></div>
+        <div id="chatbot-input-container">
+            <input type="text" id="chatbot-input" placeholder="Posez votre question..."><button id="chatbot-send"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <script>
+    // --- DATABASE ---
+    const vehicleDatabase = {
+        "35C15-CHASSIS": { brand: "iveco", group: "iveco", name: "35C15 CHASSIS", image: "https://motors.tn/magazine/wp-content/uploads/2018/02/Iveco-Daily.jpg", price: 0 },
+        "35C15-BENNE": { brand: "iveco", group: "iveco", name: "35C15 BENNE", image: "https://d2e5b8shawuel2.cloudfront.net/vehicle/308593/hlv/original.jpg", price: 0 },
+        "35C15-FOURGON": { brand: "iveco", group: "iveco", name: "35C15 FOURGON", image: "https://www.sotradies.tn/wp-content/uploads/2017/10/26488890141_a29ebd2b71_k-1.jpg", price: 0 },
+        "35C15-PLATEAU": { brand: "iveco", group: "iveco", name: "35C15 PLATEAU", image: "https://www.sotradies.tn/wp-content/uploads/2017/12/26282102370_904f456a73_k-1.jpg", price: 0 },
+        "FOURGON-12M3": { brand: "iveco", group: "iveco", name: "FOURGON 12M³", image: "https://p.turbosquid.com/ts-thumb/91/wDejps/HR/ivecodailyvanl4h3hqinterior2025_01/jpg/1729606598/600x600/fit_q87/ff34954e8aa665ac7e868e21d2bcec79aee27d83/ivecodailyvanl4h3hqinterior2025_01.jpg", price: 0 },
+        "FOURGON-16M3": { brand: "iveco", group: "iveco", name: "FOURGON 16M³", image: "https://p.turbosquid.com/ts-thumb/RL/2me4op/WW/ivecodailyvanl5h32024_01/jpg/1702126950/600x600/fit_q87/e1061b449230379841745171ea96b032838d98f1/ivecodailyvanl5h32024_01.jpg", price: 0 },
+        "ML100E18": { brand: "iveco", group: "iveco", name: "EUROCARGO ML100E18", image: "https://www.lectura-specs.fr/models/renamed/orig/chassis-eurocargo-construction-ml120e22-iveco.jpg", price: 0 },
+        "ML120E22": { brand: "iveco", group: "iveco", name: "EUROCARGO ML120E22", image: "https://www.lectura-specs.fr/models/renamed/orig/chassis-eurocargo-construction-ml120e22-iveco.jpg", price: 0 },
+        "ML180E28": { brand: "iveco", group: "iveco", name: "EUROCARGO ML180E28", image: "https://www.lectura-specs.fr/models/renamed/orig/chassis-eurocargo-construction-ml120e22-iveco.jpg", price: 0 },
+        "STRALIS-AS440S46": { brand: "iveco", group: "iveco", name: "STRALIS AS440S46", image: "https://static-viamobilis.com/via/images/others/technicalsheet/iveco-stralis-4X2.jpg", price: 0 },
+        "CPCD30S": { brand: "heli", group: "heli", name: "CPCD30 SIMPLEX", image: "https://s.alicdn.com/@sc04/kf/H89d127fe739e49a88af71041d48d31c21.jpg_720x720q50.jpg", price: 0 },
+        "CPCD30T": { brand: "heli", group: "heli", name: "CPCD30 TRIPLEX", image: "https://shop.experlift.fr/8543-thickbox_default/chariot-elevateur-diesel-3000-kg-4-roues-heli-cpcd30-xc26h.webp", price: 0 },
+        "CBD1.5T": { brand: "heli", group: "heli", name: "TRANSPALETTE 1.5T", image: "https://www.dbforktrucks.com/wp-content/uploads/2024/06/Transpalette-electrique-cbd-15-18-20j-li-s.png", price: 0 },
+        
+        "TT3.45-2RM": { brand: "newholland", group: "nh-agri", name: "TRACTEUR TT3.45 2RM", image: "https://motors.tn/magazine/wp-content/uploads/2023/07/New-Holland-TT3.45.webp", price: 0 },
+        "TT3.45-4RM": { brand: "newholland", group: "nh-agri", name: "TRACTEUR TT3.45 4RM", image: "https://motors.tn/magazine/wp-content/uploads/2023/07/New-Holland-TT3.45.webp", price: 0 },
+        "TD3.50": { brand: "newholland", group: "nh-agri", name: "TRACTEUR TD3.50", image: "https://motors.tn/magazine/wp-content/uploads/2023/07/New-Holland-TD3.50.webp", price: 0 },
+        "TT75-2RM": { brand: "newholland", group: "nh-agri", name: "TRACTEUR TT75 2RM", image: "https://motors.tn/magazine/wp-content/uploads/2023/07/New-Holland-TT75.webp", price: 0 },
+        "TT75-4RM": { brand: "newholland", group: "nh-agri", name: "TRACTEUR TT75 4RM", image: "https://cnhi-p-001-delivery.sitecorecontenthub.cloud/api/public/content/b9c29a3eac6c4952aec2b9537bc82c20?v=0c198b1e&t=size500", price: 0 },
+        "TT80-4RM": { brand: "newholland", group: "nh-agri", name: "TRACTEUR TT4.80 4RM", image: "https://www.lectura-specs.com/models/renamed/orig/4wd-tractors-tt480-new-holland.jpg", price: 0 },
+        "TT95-4RM": { brand: "newholland", group: "nh-agri", name: "TRACTEUR TD95 4RM", image: "https://www.lectura-specs.fr/models/renamed/orig/tracteurs-4wd-td95-new-holland.jpg", price: 0 },
+        "TD85F-AGRI": { brand: "newholland", group: "nh-agri", name: "TRACTEUR TD85F", image: "https://motors.tn/magazine/wp-content/uploads/2023/07/New-Holland-TD85F.webp", price: 0 },
+        "T7.175": { brand: "newholland", group: "nh-agri", name: "TRACTEUR T7.175", image: "https://assets.cnhindustrial.com/nhag/nar/en-us/assets/images/product-images/tractors/t7-heavy-duty-plmi/gallery/nh-t7-heavy-duty-plmi-gallery-01.jpg", price: 0 },
+
+        // --- NEW HOLLAND CONSTRUCTION (MIS À JOUR) ---
+        "B80B-CONST": { brand: "newholland", group: "nh-const", name: "TRACTOPELLE B80B", image: "https://www.lectura-specs.fr/models/renamed/orig/chargeuses-pelleteuses-b80b-new-holland.jpg", price: 0 },
+        "B80C-CONST": { brand: "newholland", group: "nh-const", name: "TRACTOPELLE B80C", image: "https://machineryline.fr/img/photos/2308/14/19/502407720000/1693385455311308298_common.jpg", price: 0 },
+        "B90B-CONST": { brand: "newholland", group: "nh-const", name: "TRACTOPELLE B90B", image: "https://motors.tn/magazine/wp-content/uploads/2022/04/Prix-tractopelle-New-Holland-B90B-neuve-en-Tunisie.png", price: 0 },
+        "L313-CONST": { brand: "newholland", group: "nh-const", name: "MINI CHARGEUSE L313", image: "https://www.nimr.com.tn/wp-content/uploads/2021/06/Mini-chargeuseLonking-CDM-307-1.png", price: 0 },
+    };
+
+    const detailedVehicleData = {
+        "35C15 CHASSIS": { 
+            name: "IVECO Daily 35C15 Châssis-Cabine", 
+            description: "Camion Iveco Daily Type 35C15/E3 de catégorie camion tourisme PTAC 3.5 tonne simple cabine, doté d’un moteur Iveco 3L développant 146 CV DIN suralimenté par un turbo-Intercooler. Muni d’un train roulant 4x2 roues jumelées et une suspension renforcée de haute performances. La propulsion arrière garantie la motricité et une plus grande puissance au démarrage.", 
+            specs: { 
+                "Marque": "IVECO", "Nombre de places": "3", "Trains Roulants": "4X2 Roues jumelées", "Puissance Fiscale": "10 CV",
+                "Moteur Marque": "IVECO", "Moteur Type": "F1CE3481-DOHC", "Nombre de cylindres": "4 verticaux en ligne", "Cylindrée": "2998 cc", "Alimentation": "Common rail", "Suralimentation": "Turbo et intercooler", "Energie": "Diesel", "Puissance Maximale": "146 ch (107 kW) @ 3500 tr/min", "Norme Emission": "Euro 3",
+                "Boîte de vitesse": "Manuelle, 6 rapports AV + 1 AR", "Vitesse Maximale": "120 km/h", "Embrayage": "Monodisque à sec",
+                "Direction": "Assistée et hydraulique",
+                "PTAC": "3500 kg",
+                "Empattement": "3450 - 3750 mm", "Longueur hors tout": "5913 - 6523 mm", "Largeur hors tout": "2010 mm", "Rayon de braquage": "6573 - 8545 mm", "Longueur Carrossable": "3560 - 4160 mm",
+                "Suspension Avant": "Amortisseurs télescopiques + QUAD-Tor + Barre Stabilisatrice", "Suspension Arrière": "Amortisseurs télescopiques + Ressorts à lames semi-elliptiques + Barre stabilisatrice",
+                "Pneumatiques": "195/75R16",
+                "Freinage": "Disques AV/AR avec ABS",
+                "Réservoir": "70 L",
+                "Equipements": "Volant réglable en hauteur, Climatisation (chauffage et ventilation), Vitres électriques, Siège réglable, Radio, Cabine semi-avancée et inclinable"
+            } 
+        },
+        "35C15 BENNE": { 
+            name: "IVECO Daily 35C15 Benne Basculante", 
+            description: "L'allié des chantiers, prêt à l'emploi. Monté sur le robuste châssis 35C15, cet équipement avec benne basculante en acier est conçu pour résister aux conditions les plus rudes.", 
+            specs: {
+                "Marque": "IVECO", "Nombre de places": "3", "Trains Roulants": "4X2 Roues jumelées", "Puissance Fiscale": "10 CV",
+                "Moteur Marque": "IVECO", "Moteur Type": "F1CE3481-DOHC", "Cylindrée": "2998 cc", "Puissance Maximale": "146 ch (107 kW) @ 3500 tr/min",
+                "Carrosserie": "Benne Basculante", "PTAC": "3500 kg", "Charge Utile Nette": "Environ 850 kg",
+                "Boîte de vitesse": "Manuelle, 6 rapports AV + 1 AR", "Vitesse Maximale": "120 km/h",
+                "Suspension Avant": "Amortisseurs télescopiques + QUAD-Tor + Barre Stabilisatrice", "Suspension Arrière": "Amortisseurs télescopiques + Ressorts à lames semi-elliptiques + Barre stabilisatrice",
+                "Pneumatiques": "195/75R16", "Freinage": "Disques AV/AR avec ABS", "Réservoir": "70 L"
+            } 
+        },
+        "35C15 FOURGON": { 
+            name: "IVECO Daily 35C15 Fourgon Grand Volume", 
+            description: "Le spécialiste du transport volumineux. La stabilité des roues jumelées combinée à une caisse Plywood de 20m³ en fait le véhicule parfait pour les déménageurs et les transporteurs.", 
+            specs: {
+                "Marque": "IVECO", "Nombre de places": "3", "Trains Roulants": "4X2 Roues jumelées", "Puissance Fiscale": "10 CV",
+                "Moteur Marque": "IVECO", "Moteur Type": "F1CE3481-DOHC", "Cylindrée": "2998 cc", "Puissance Maximale": "146 ch (107 kW) @ 3500 tr/min",
+                "Carrosserie": "Fourgon Grand Volume (ex: 20m³)", "PTAC": "3500 kg", "Charge Utile Nette": "Environ 885 kg (sans hayon)",
+                "Boîte de vitesse": "Manuelle, 6 rapports AV + 1 AR", "Vitesse Maximale": "120 km/h",
+                "Suspension Avant": "Amortisseurs télescopiques + QUAD-Tor + Barre Stabilisatrice", "Suspension Arrière": "Amortisseurs télescopiques + Ressorts à lames semi-elliptiques + Barre stabilisatrice",
+                "Pneumatiques": "195/75R16", "Freinage": "Disques AV/AR avec ABS", "Réservoir": "70 L"
+            } 
+        },
+        "35C15 PLATEAU": { 
+            name: "IVECO Daily 35C15 Plateau-Ridelles", 
+            description: "La solution pour les charges longues et encombrantes. Le plateau avec ridelles rabattables en aluminium offre une surface de chargement entièrement accessible et une charge utile optimisée.", 
+            specs: {
+                "Marque": "IVECO", "Nombre de places": "3", "Trains Roulants": "4X2 Roues jumelées", "Puissance Fiscale": "8 CV",
+                "Moteur Marque": "IVECO", "Moteur Type": "F1CE3481-DOHC", "Cylindrée": "2998 cc", "Puissance Maximale": "146 ch (107 kW) @ 3500 tr/min", "Norme Emission": "Euro 4",
+                "Boîte de vitesse": "Manuelle, 6 rapports AV + 1 AR", "Vitesse Maximale": "120 km/h",
+                "PTAC": "7000 kg",
+                "Empattement": "3450 - 4750 mm", "Longueur hors tout": "5943 - 8238 mm", "Largeur hors tout": "2052 mm", "Longueur Carrossable": "3560 - 6150 mm",
+                "Suspension Avant": "Amortisseurs télescopiques + QUAD-Tor + Barre Stabilisatrice", "Suspension Arrière": "Amortisseurs télescopiques + Ressorts à lames semi-elliptiques + Barre stabilisatrice",
+                "Pneumatiques": "225/75R16", "Freinage": "Disques AV/AR avec ABS", "Réservoir": "100 L",
+                "Equipements": "Volant réglable en hauteur, Vitres électriques, Siège réglable, Radio, Cabine semi-avancée et inclinable"
+            } 
+        },
+        "FOURGON 12M³": { 
+            name: "IVECO Daily Fourgon 12m³", 
+            description: "Le fourgon IVECO Daily 35C15E4V de volume 12m³ a une charge utile élevée de 1 100 kg. Sa conception d'un seul bloc vous offre un excellent contrôle du véhicule ainsi qu'une suspension avant de haute performance.", 
+            specs: {
+                "Volume": "12m³", "Charge Utile": "1100 kg", "PTAC": "3500 kg",
+                "Moteur": "3.0L Diesel", "Cylindrée": "2998 cc", "Puissance Maximale": "146 ch (107 kW) @ 3000 tr/min",
+                "Transmission": "Manuelle synchronisée à 6 rapports", "Vitesse Maximale": "130 km/h", "Direction": "Assistée",
+                "Suspension Avant": "Amortisseur télescopique + Quad-Tor", "Suspension Arrière": "Amortisseur télescopique + Ressort à lames parabolique", "Barre Stabilisatrice": "Avant et Arrière",
+                "Empattement": "3520 mm", "Longueur hors tout": "6069 mm", "Largeur hors tout": "2010 mm",
+                "Sécurité": "ABS, ESP, Appuis-tête réglables",
+                "Intérieur": "Climatisation, Volant multifonction et réglable, Siège réglable, Vitres électriques, Fermeture centrale, Audio MP3/AUX",
+                "Extérieur": "Portes arrière, Porte latérale coulissante, Rétroviseurs avec feux directionnels, Feux LED avant, Feux anti-brouillard"
+            } 
+        },
+        "FOURGON 16M³": { 
+            name: "IVECO Daily Fourgon 16m³", 
+            description: "Le maître du volume pour les longues tournées. Cette version allongée offre un volume de chargement impressionnant de 16m³, tout en conservant une charge utile élevée et une consommation optimisée.", 
+            specs: {
+                "Volume": "16 m³", "PTAC": "3500 kg",
+                "Moteur": "2.3L Diesel, Turbo variable", "Puissance": "156 ch",
+                "Transmission": "Manuelle 6 rapports",
+                "Empattement": "4100 mm", "Longueur totale": "7090 mm", "Largeur": "2010 mm", "Hauteur": "2610 mm",
+                "Longueur utile": "~4706 mm", "Largeur utile": "1800 mm", "Hauteur seuil de chargement": "760 mm",
+                "Pneumatiques": "195/75 R16",
+                "Réservoir": "100 L",
+                "Sécurité": "ABS, ESP",
+                "Equipements": "Banquette 2+1, Portes coulissantes, Kit anti-crevaison"
+            } 
+        },
+        "EUROCARGO ML100E18": {
+            name: "IVECO Eurocargo 100E18",
+            description: "Le camion qui aime la ville. L'Eurocargo 100E18 est la référence de la distribution urbaine et régionale. Sa maniabilité et son moteur efficient en font un atout majeur pour la messagerie et les livraisons.",
+            specs: {
+                "Poids total autorisé en charge (PTAC)": "10 000 kg",
+                "Traction": "4x2",
+                "Moteur": "134 kW (≈ 180 ch), Tector 6 cylindres",
+                "Cylindrée": "5 880 cm³",
+                "Couple": "570 Nm à 1 200 tr/min",
+                "Norme Emission": "Euro V/III selon version",
+                "Empattement": "2 700 mm",
+                "Boîte de vitesses": "Manuelle à 6 rapports",
+                "Suspension": "Ressorts hélicoïdaux AV/AR",
+                "Freinage": "Disques AV et AR, ABS",
+                "Réservoir": "115 L",
+                "Cabine": "Courte ou 2-places, option couchette bivouac light",
+                "Poids à vide": "≈ 6 920 kg pour version fourgon avec hayon"
+            }
+        },
+        "EUROCARGO ML120E22": {
+            name: "IVECO Eurocargo 120E22",
+            description: "La polyvalence par excellence. Avec un PTAC de 12 tonnes, l'Eurocargo 120E22 est adapté à une multitude de missions, du transport régional au BTP léger, offrant un excellent compromis entre charge utile et agilité.", 
+            specs: {
+                "Poids total autorisé en charge (PTAC)": "12 000 kg",
+                "Traction": "4x2",
+                "Moteur": "164 kW (≈ 223 ch)",
+                "Norme Emission": "Euro VI",
+                "Empattement": "Variable selon version (cabine jour ou coucher)",
+                "Boîte de vitesses": "ZF 6 ou 9 vitesses manuelles",
+                "Suspension": "Lames AV/AR avec amortisseurs + essieu avant à ressorts",
+                "Châssis": "Construction échelle en acier riveté",
+                "Cabine": "Jour ou couchette (3 places), leviers sur colonne, tachygraphe 2 conducteurs, ventilation 500 m³/h via filtre 10 kW",
+                "Freinage": "ABS, EBL, disques ventilés",
+                "Électricité": "24 V, alternateur 28 V 70 A, batteries 2x12 V 110 Ah",
+                "Pneumatiques standards": "245/70 R19.5"
+            }
+        },
+        "EUROCARGO ML180E28": {
+            name: "IVECO Eurocargo 180E28",
+            description: "La force tranquille pour les missions lourdes. Idéal pour l'approche chantier et le transport de matériaux, le 180E28 combine une charge utile élevée avec la robustesse légendaire de la gamme Eurocargo.",
+            specs: {
+                "Poids total autorisé en charge (PTAC)": "18 000 kg",
+                "Traction": "4x2",
+                "Moteur": "209 kW (≈ 285 ch), Tector 6 cylindres",
+                "Cylindrée": "5 883 cm³",
+                "Couple": "930–1000 Nm",
+                "Norme Emission": "Euro V/III selon version",
+                "Empattement": "3 690 mm",
+                "Boîte de vitesses": "Manuelle à 9 vitesses",
+                "Suspension": "Ressorts hélicoïdaux + amortisseurs",
+                "Freinage": "Disques AV et AR, ABS",
+                "Réservoir": "180 L",
+                "Poids à vide": "≈ 5 205 kg",
+                "Charge utile": "≈ 12 795 kg",
+                "Cabine": "Jour ou couchette, incl. équipement frigo isolation, vitres électriques, hayon, régulateur & tachygraphe",
+                "Dimensions": "L = 6 269 mm, l = 2 495 mm, H = 2 839 mm",
+                "Garde au sol": "232 mm"
+            }
+        },
+        "STRALIS AS440S46": { 
+            name: "IVECO Stralis AS440S46", 
+            description: "Le champion de la longue distance, le Stralis est conçu pour offrir un maximum de rentabilité et de confort sur les trajets internationaux. Son moteur Cursor puissant et efficient, combiné à une cabine ergonomique, en fait le choix privilégié des transporteurs.", 
+            specs: { 
+                "Configuration": "Tracteur Routier 4x2", 
+                "PTRA": "44 Tonnes",
+                "Cabine": "Active Space (cabine profonde, toit haut)",
+                "Moteur": "IVECO Cursor 11",
+                "Cylindrée": "11.1 L",
+                "Puissance": "460 ch (338 kW) de 1500 à 1900 tr/min",
+                "Couple": "2150 Nm de 925 à 1500 tr/min",
+                "Norme Emission": "Euro 5 / EEV",
+                "Transmission": "Boîte de vitesses automatisée ZF EuroTronic 12 rapports",
+                "Suspension Avant": "Lames paraboliques",
+                "Suspension Arrière": "Pneumatique à 4 coussins",
+                "Freinage": "Disques ventilés AV/AR, EBS, ESP, Hill Holder",
+                "Empattement": "3800 mm",
+                "Réservoir": "1x 760 L (Carburant), 1x 100 L (AdBlue)",
+                "Pneumatiques": "315/70 R 22.5",
+                "Equipements": "Ralentisseur hydraulique, Climatisation, Chauffage autonome, Couchette double, Réfrigérateur"
+            } 
+        },
+        "CPCD30 SIMPLEX": { 
+            name: "HELI CPCD30 Simplex", 
+            description: "Le partenaire fiable et économique pour la manutention. Robuste, simple d'utilisation et facile à entretenir...", 
+            specs: {
+                "Moteur": "ISUZU C240 PKJ, 4 cylindres Diesel", "Puissance": "44.9 kW",
+                "Capacité de levage": "3000 kg", "Mât": "Simplex 2 sections", "Hauteur de levée": "3300 mm", "Levée libre": "140 mm",
+                "Accessoires": "Tablier à déplacement latéral", "Longueur des fourches": "1220 mm", "Inclinaison mât (AV/AR)": "6° / 12°",
+                "Vitesse de déplacement": "18 km/h", "Vitesse de levage": "30 m/min",
+                "Pneus": "Gonflables, 4 roues (AV: 28x9-15-12PR, AR: 6.50-10-10PR)",
+                "Equipements": "Eclairage complet, Siège réglable"
+            } 
+        },
+        "CPCD30 TRIPLEX": { 
+            name: "HELI CPCD30 Triplex", 
+            description: "Prenez de la hauteur. La version Triplex du CPCD30 permet d'atteindre des hauteurs de gerbage élevées...", 
+            specs: {
+                "Capacité de levage": "3000 kg (@ 500 mm)", "Poids à vide": "~4300 kg",
+                "Moteur": "Isuzu C240PKJ, 4 cylindres, 2369 cm³", "Puissance": "45 kW", "Couple": "186 Nm",
+                "Mât": "Triplex avec levée libre", "Hauteur de levée max": "3000 mm",
+                "Vitesse déplacement": "18 km/h", "Vitesse levage (chargé)": "0.43 m/s",
+                "Dimensions (Lxl)": "2675 mm x 1225 mm", "Rayon de braquage": "2400 mm",
+                "Pneus": "Gonflables (AV: 28x9-15-12PR, AR: 6.50-10-10PR)",
+                "Sécurité": "Système OPS (arrêt automatique), Frein de stationnement de sécurité"
+            } 
+        },
+        "TRANSPALETTE 1.5T": { 
+            name: "HELI Transpalette Électrique 1.5T", 
+            description: "L'agilité au service de votre productivité. Fini les efforts inutiles, ce transpalette électrique facilite le déplacement des palettes...", 
+            specs: {
+                "Capacité": "1500 kg (@ 600 mm)", "Poids à vide": "138 kg",
+                "Batterie": "Lithium-Ion 24V / 20-30 Ah", "Moteur traction / levage": "0.75 kW / 0.8 kW",
+                "Vitesse déplacement (chargé/vide)": "4.2 / 4.5 km/h", "Pente max (chargé/vide)": "5% / 10%",
+                "Hauteur levée / abaissée": "200 mm / 85 mm", "Longueur fourches": "1150 mm",
+                "Rayon de braquage": "~1345 mm", "Roues": "Polyuréthane",
+                "Freinage": "Électromagnétique avec récupération d'énergie",
+                "Sécurité": "Bouton d'inversion d'urgence, Arrêt automatique au relâchement du timon"
+            } 
+        },
+        "TRACTEUR TT3.45 2RM": { 
+            name: "New Holland TT3.45 2RM", 
+            description: "L'expert des cultures spécialisées. Compact, incroyablement agile et économique...", 
+            specs: {
+                "Moteur": "3 cylindres, 2.5 L, Aspiration naturelle", "Puissance": "42 ch", "Couple": "165.8 Nm",
+                "Transmission": "8 vitesses AV x 2 AR", "Vitesse max": "28.16 km/h",
+                "Prise de Force (PTO)": "540 tr/min",
+                "Hydraulique": "Pompe principale 29 L/min @ 210 bar", "Capacité de relevage": "1800 kg (Cat I-II)",
+                "Poids à vide": "1885 kg", "Empattement": "1910 mm", "Dimensions (LxlxH)": "3666 x 1690 x 2350 mm",
+                "Pneus (AV/AR)": "8.0x18 / 13.6x28", "Réservoir": "62 L"
+            } 
+        },
+        "TRACTEUR TT3.45 4RM": { 
+            name: "New Holland TT3.45 4RM", 
+            description: "La polyvalence à toute épreuve. En ajoutant 4 roues motrices, le TT3.45 gagne en polyvalence...", 
+            specs: {
+                "Moteur": "3 cylindres, 2.5 L, Aspiration naturelle", "Puissance": "42 ch", "Couple": "165.8 Nm",
+                "Transmission": "8 AV x 8 AR (Synchro Shuttle)", "Vitesse max": "28.2 km/h",
+                "Prise de Force (PTO)": "540 tr/min",
+                "Hydraulique": "Pompe 29 L/min @ 210 bar", "Capacité de relevage": "1800 kg (Cat I-II)",
+                "Poids à vide": "2160 kg", "Empattement": "1990 mm", "Dimensions (LxlxH)": "3700 x 1690 x 2350 mm",
+                "Rayon de braquage": "2.9 m", "Freins": "Disques immergés à bain d'huile", "Réservoir": "60 L"
+            } 
+        },
+        "TRACTEUR TD3.50": { 
+            name: "New Holland TD3.50 4RM", 
+            description: "Conçu pour être simple, robuste et fiable. Le TD3.50 est un tracteur utilitaire par excellence...", 
+            specs: {
+                "Moteur": "3 cylindres Turbo FPT (S8000), 2.9 L", "Puissance": "48 ch", "Couple": "190 Nm",
+                "Transmission": "8 AV x 8 AR (Synchro Shuttle)", "Vitesse max": "~33 km/h",
+                "Prise de Force (PTO)": "540 tr/min + au sol",
+                "Hydraulique": "Pompe 40 L/min @ 175 bar", "Capacité de relevage": "2200 kg",
+                "Poids à vide": "2120 kg", "Empattement": "2057 mm", "Dimensions (LxlxH)": "3682 x 1598 x 2440 mm",
+                "Garde au sol": "333 mm", "Réservoir": "52 L"
+            } 
+        },
+        "TRACTEUR TT75 2RM": { 
+            name: "New Holland TT75 2RM", 
+            description: "Plus de puissance pour plus de productivité. Le TT75 est un tracteur robuste et performant...", 
+            specs: {
+                "Moteur": "4 cylindres Diesel, 3.9 L", "Puissance": "75 ch", "Couple": "257 Nm",
+                "Transmission": "8 AV x 2 AR", "Vitesse max": "31.9 km/h",
+                "Prise de Force (PTO)": "540 tr/min",
+                "Hydraulique": "Pompe 45 L/min", "Capacité de relevage": "2000 kg (avec assistance)",
+                "Poids à vide": "2450 kg", "Empattement": "2210 mm", "Dimensions (LxlxH)": "3540 x 2010 x 2400 mm",
+                "Rayon de braquage": "3.27 m", "Réservoir": "60 L"
+            } 
+        },
+        "TRACTEUR TT75 4RM": { 
+            name: "New Holland TT75 4RM", 
+            description: "La puissance et la traction intégrale pour une polyvalence maximale. Le TT75 4RM combine la robustesse reconnue de la série avec l'agilité des 4 roues motrices, le rendant apte aux travaux les plus exigeants.", 
+            specs: {
+                "Moteur": "IVECO 8045.05, 4 cylindres Turbo", "Cylindrée": "3.9 L", "Puissance": "75 ch (55 kW)", "Couple": "257 Nm @ 1500 tr/min",
+                "Transmission": "12 AV x 12 AR Synchro Shuttle", "Traction": "4 Roues Motrices (4RM)",
+                "Prise de Force (PTO)": "Indépendante, 540 tr/min",
+                "Hydraulique": "Pompe 45 L/min", "Capacité de relevage": "2500 kg (aux rotules)",
+                "Poids opérationnel": "2850 kg", "Empattement": "2250 mm",
+                "Freins": "Disques à bain d'huile, commande hydraulique", "Réservoir": "80 L"
+            } 
+        },
+        "TRACTEUR TT4.80 4RM": { 
+            name: "New Holland TT4.80 4RM", 
+            description: "Moderne, efficace et confortable. Le TT4.80 est un tracteur polyvalent conçu pour offrir des performances optimales dans une large gamme d'applications, des travaux des champs à la manutention.", 
+            specs: {
+                "Moteur": "FPT S8000, 4 cylindres Turbo", "Cylindrée": "2.9 L", "Puissance": "80 ch (59 kW)", "Couple": "340 Nm @ 1400 tr/min",
+                "Transmission": "12 AV x 12 AR Synchro Shuttle avec inverseur hydraulique", "Traction": "4 Roues Motrices (4RM)",
+                "Prise de Force (PTO)": "540 / 540E tr/min",
+                "Hydraulique": "Pompe 52 L/min", "Capacité de relevage": "3000 kg",
+                "Poids": "3600 kg", "Empattement": "2130 mm",
+                "Cabine": "VisionView™ avec climatisation (option)", "Réservoir": "90 L"
+            } 
+        },
+        "TRACTEUR TD95 4RM": { 
+            name: "New Holland TD95 4RM", 
+            description: "La puissance brute et la fiabilité légendaire de la série TD. Le TD95 est un tracteur robuste, conçu pour les travaux lourds et les longues journées, offrant une performance constante.", 
+            specs: {
+                "Moteur": "4 cylindres Turbo Diesel", "Cylindrée": "3.9 L", "Puissance": "98 ch (72 kW)",
+                "Transmission": "12 AV x 12 AR Synchro Shuttle", "Traction": "4 Roues Motrices (4RM)",
+                "Prise de Force (PTO)": "540 / 1000 tr/min",
+                "Hydraulique": "Pompe 51.7 L/min", "Capacité de relevage": "3565 kg",
+                "Poids opérationnel": "3900 kg", "Empattement": "2360 mm",
+                "Freins": "Disques à bain d'huile", "Réservoir": "110 L"
+            } 
+        },
+        "TRACTEUR TD85F": { 
+            name: "New Holland TD85F", 
+            description: "Le spécialiste des cultures en rangs étroits. Conçu pour les vergers et les vignobles, le TD85F allie puissance et format compact pour une maniabilité exceptionnelle sans sacrifier la performance.", 
+            specs: {
+                "Utilisation": "Tracteur fruitier / vigneron",
+                "Moteur": "FPT, 4 cylindres Turbo", "Cylindrée": "3.2 L", "Puissance": "82 ch (60 kW)",
+                "Transmission": "12 AV x 12 AR Synchro Shuttle (option 20x12 avec super-réducteur)", "Traction": "4 Roues Motrices (4RM)",
+                "Prise de Force (PTO)": "540 / 540E tr/min",
+                "Hydraulique": "Pompe 48 L/min", "Capacité de relevage": "2600 kg",
+                "Largeur hors-tout": "À partir de 1.48 m", "Poids": "~2800 kg",
+                "Cabine": "Arceau de sécurité ou cabine 'Blue Cab' (option)", "Réservoir": "70 L"
+            } 
+        },
+        "TRACTEUR T7.175": { 
+            name: "New Holland T7.175", 
+            description: "Entrez dans l'ère de l'agriculture de précision. Le T7.175 est un concentré de technologie...", 
+            specs: {
+                "Moteur": "FPT NEF, 6 cylindres, 6.7 L Turbo", "Puissance max": "175 ch", "Couple": "750 Nm",
+                "Transmission": "Power Command (Powershift) ou Auto Command (CVT)", "Vitesse max": "40-50 km/h",
+                "Prise de Force (PTO)": "540 / 1000 tr/min",
+                "Hydraulique": "Pompe 113-159 L/min", "Capacité de relevage": "5527 kg (à la boule)",
+                "Poids": "5800 - 6100 kg", "Empattement": "2730 - 2870 mm",
+                "Cabine": "Climatisée, suspension Comfort Ride, SideWinder II", "Equipements": "ISOBUS, Guidage télématique, PTO avant (option)"
+            } 
+        },
+        "TRACTOPELLE B80B": { 
+            name: "New Holland B80B", 
+            description: "La polyvalence incarnée sur les chantiers. Le B80B est un tractopelle robuste et fiable, réputé pour sa simplicité d'utilisation et sa performance constante dans les tâches de creusement et de chargement.", 
+            specs: {
+                "Type": "Tractopelle 4x4",
+                "Moteur": "FPT, 4 cylindres Turbo", "Puissance": "90 ch (67 kW)",
+                "Transmission": "Power Shuttle 4x4",
+                "Poids opérationnel": "7550 kg",
+                "Profondeur de creusée (Rétrocaveuse)": "4.4 m",
+                "Force d'arrachement (Rétrocaveuse)": "5600 daN",
+                "Capacité de levage (Chargeur)": "3300 kg", 
+                "Hauteur de déversement (Chargeur)": "2.65 m",
+                "Godet Standard (Chargeur)": "1.0 m³",
+                "Hydraulique": "Pompe à engrenages",
+                "Cabine": "ROPS/FOPS pour une sécurité maximale"
+            } 
+        },
+        "TRACTOPELLE B90B": { 
+            name: "New Holland B90B", 
+            description: "La référence des tractopelles, alliant puissance et précision. Idéal pour les entrepreneurs exigeants, le B90B offre une productivité élevée grâce à son moteur performant et son système hydraulique efficace.", 
+            specs: {
+                "Type": "Tractopelle 4x4",
+                "Moteur": "FPT, 4 cylindres Turbo Intercooler", "Puissance moteur": "97 ch (72 kW)",
+                "Poids opérationnel": "8130 kg",
+                "Transmission": "Power Shuttle ou Power Shift en option",
+                "Profondeur de creusée (Rétrocaveuse)": "4.41 m (Standard) / 5.59 m (Balancier télescopique)",
+                "Force d'arrachement (Godet rétro)": "6400 daN",
+                "Capacité de levage (Chargeur)": "3550 kg",
+                "Hauteur de déversement (Chargeur)": "2.7 m",
+                "Godet Standard (Chargeur)": "1.15 m³",
+                "Hydraulique": "Pompe à cylindrée variable (Load Sensing)",
+                "Cabine": "Confortable avec excellente visibilité, climatisation en option"
+            } 
+        },
+        "TRACTOPELLE B80C": { 
+            name: "New Holland B80C", 
+            description: "La nouvelle génération de performance et de confort. Le B80C est un tractopelle puissant et polyvalent, doté d'un moteur FPT robuste et d'une cabine améliorée pour une productivité accrue sur tous les chantiers.", 
+            specs: {
+                "Type": "Tractopelle 4x4",
+                "Moteur": "FPT F5, 4 cylindres Turbo", "Cylindrée": "3.4 L", "Puissance": "97 ch (72 kW)",
+                "Transmission": "Power Shuttle ou Power Shift",
+                "Poids opérationnel": "~8100 kg",
+                "Profondeur de creusée (Rétrocaveuse)": "4.5 m (avec balancier standard)",
+                "Capacité de levage (Chargeur)": "3425 kg", "Hauteur de déversement (Chargeur)": "2.7 m",
+                "Hydraulique": "Pompe à cylindrée variable",
+                "Cabine": "ROPS/FOPS avec visibilité panoramique, climatisation en option"
+            } 
+        },
+        "MINI CHARGEUSE L313": { 
+            name: "New Holland L313", 
+            description: "Compacte, agile et incroyablement polyvalente. La mini-chargeuse L313 est conçue pour travailler dans les espaces les plus restreints tout en offrant une force de levage et une stabilité exceptionnelles grâce à sa cinématique verticale brevetée Super Boom®.", 
+            specs: {
+                "Type": "Mini-Chargeuse sur pneus (Skid Steer)",
+                "Moteur": "Diesel, 4 cylindres", "Puissance": "46 ch (34.3 kW)",
+                "Capacité de charge nominale": "590 kg (50% de la charge de basculement)",
+                "Charge de basculement": "1180 kg",
+                "Poids opérationnel": "2265 kg",
+                "Levage": "Cinématique verticale Super Boom®",
+                "Hauteur de levage (à l'axe d'articulation)": "2.85 m",
+                "Vitesse de déplacement": "11.9 km/h",
+                "Hydraulique (Débit standard)": "58 L/min",
+                "Dimensions (LxlxH)": "3170 x 1520 x 1910 mm",
+                "Empattement": "991 mm",
+                "Equipements": "Cabine ROPS/FOPS, Commandes manuelles et aux pieds"
+            } 
+        }
+    };
+
+    const configuratorData = {
+        "35C15-CHASSIS": { options: [ { id: 'engine', name: 'Motorisation', type: 'radio', default: '146hp', choices: [ { id: '146hp', name: '3.0L F1C - 146ch (Standard)' }, { id: '175hp', name: '3.0L F1C - 175ch' } ] }, { id: 'suspension', name: 'Suspension Arrière', type: 'radio', default: 'standard', choices: [ { id: 'standard', name: 'Lames paraboliques (Standard)' }, { id: 'reinforced', name: 'Lames paraboliques renforcées' }, { id: 'airpro', name: 'Suspension pneumatique Air-Pro' } ] } ] },
+        "CPCD30S": { options: [ { id: 'tires', name: 'Pneumatiques', type: 'radio', default: 'standard', choices: [ { id: 'standard', name: 'Pneus gonflables (Standard)' }, { id: 'solid', name: 'Pneus pleins souples (anti-crevaison)' } ] }, { id: 'attachment', name: 'Accessoire de Mât', type: 'radio', default: 'none', choices: [ { id: 'none', name: 'Aucun' }, { id: 'sideshift', name: 'Déplacement latéral (Side Shift)' } ] } ] },
+        "TT75-2RM": { options: [ { id: 'cab', name: 'Cabine', type: 'radio', default: 'arceau', choices: [ { id: 'arceau', name: 'Arceau de sécurité (Standard)' }, { id: 'cabine_ac', name: 'Cabine avec climatisation' } ] }, { id: 'loader', name: 'Chargeur Frontal', type: 'radio', default: 'none', choices: [ { id: 'none', name: 'Sans chargeur' }, { id: 'loader_full', name: 'Chargeur frontal installé' } ] } ] }
+    };
+    configuratorData["35C15-BENNE"] = configuratorData["35C15-CHASSIS"];
+    configuratorData["35C15-FOURGON"] = configuratorData["35C15-CHASSIS"];
+    configuratorData["35C15-PLATEAU"] = configuratorData["35C15-CHASSIS"];
+    configuratorData["FOURGON-12M3"] = configuratorData["35C15-CHASSIS"];
+    configuratorData["FOURGON-16M3"] = configuratorData["35C15-CHASSIS"];
+    configuratorData["CPCD30T"] = configuratorData["CPCD30S"];
+    configuratorData["TT3.45-2RM"] = configuratorData["TT75-2RM"];
+    configuratorData["TT3.45-4RM"] = configuratorData["TT75-2RM"];
+    configuratorData["TT75-4RM"] = configuratorData["TT75-2RM"];
+
+
+    let lastScrollPosition = 0; // Variable to store scroll position
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // --- AJOUT : LOGIQUE POUR CACHER/MONTRER LA BARRE DE NAVIGATION ---
+        const header = document.getElementById('main-header');
+        let lastScrollY = window.scrollY;
+
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.scrollY;
+            if (lastScrollY < currentScrollY && currentScrollY > 150) {
+                // Glissement vers le bas : cacher la barre
+                header.classList.add('header-hidden');
+            } else {
+                // Glissement vers le haut : montrer la barre
+                header.classList.remove('header-hidden');
+            }
+            lastScrollY = currentScrollY <= 0 ? 0 : currentScrollY;
+        });
+        // --- FIN DE L'AJOUT ---
+
+
+        const productGrids = {
+            'iveco': document.querySelector('#iveco .grid'),
+            'heli': document.querySelector('#heli .grid'),
+            'nh-agri': document.getElementById('nh-agri-grid'),
+            'nh-const': document.getElementById('nh-const-grid')
+        };
+
+        Object.entries(vehicleDatabase).forEach(([id, vehicle]) => {
+            const grid = productGrids[vehicle.group];
+            if (!grid) return;
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            card.dataset.vehicleId = id;
+            
+            // Appliquer l'image en fond et gérer les erreurs
+            const imageUrl = vehicle.image || 'https://placehold.co/600x400/eeeeee/1F2937?text=Image';
+            card.style.backgroundImage = `url('${imageUrl}')`;
+            
+            // Vérifier si l'image se charge, sinon mettre un placeholder
+            const img = new Image();
+            img.src = imageUrl;
+            img.onerror = () => {
+                card.style.backgroundImage = `url('https://placehold.co/600x400/eeeeee/1F2937?text=Image+Indisponible')`;
+            };
+
+            card.innerHTML = `
+                <div class="product-card-overlay">
+                    <h3 class="product-card-title font-teko">${vehicle.name}</h3>
+                    <p class="product-card-subtitle">Cliquez pour en savoir plus</p>
+                </div>`;
+            grid.appendChild(card);
+        });
+
+        const catalogueView = document.getElementById('catalogue-view');
+        const techSheetView = document.getElementById('tech-sheet-view');
+        const zoomModal = document.getElementById('zoom-modal');
+        const closeZoomModalBtn = document.getElementById('close-zoom-modal');
+        const zoomedImage = document.getElementById('zoomed-image');
+        const configuratorModal = document.getElementById('configurator-modal');
+        const closeConfiguratorModalBtn = document.getElementById('close-configurator-modal');
+
+        const animatedElements = document.querySelectorAll('.product-card');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        animatedElements.forEach(el => observer.observe(el));
+
+        const specGroups = [
+            { title: 'Informations Générales', icon: 'fa-car', keys: ['Marque', 'Nombre de places', 'Trains Roulants', 'Puissance Fiscale', 'PTAC', 'Poids total autorisé en charge (PTAC)', 'PTRA', 'PTAC / PTRA', 'Volume', 'Charge Utile', 'Charge utile', 'Charge Utile Nette', 'Poids à vide', 'Poids opérationnel', 'Poids', 'Configuration', 'Application', 'Utilisation', 'Type', 'Traction', 'Capacité de charge nominale', 'Charge de basculement'] },
+            { title: 'Motorisation & Performance', icon: 'fa-cogs', keys: ['Moteur', 'Moteur Marque', 'Moteur Type', 'Nombre de cylindres', 'Cylindrée', 'Alimentation', 'Suralimentation', 'Energie', 'Puissance Maximale', 'Puissance', 'Puissance max', 'Puissance moteur', 'Puissance / Couple', 'Couple', 'Couple max', 'Norme Emission', 'Vitesse Maximale', 'Vitesse max', 'Vitesse de déplacement'] },
+            { title: 'Transmission & Châssis', icon: 'fa-sitemap', keys: ['Transmission', 'Boîte de vitesse', 'Boîte de vitesses', 'Nombre de rapport', 'Embrayage', 'Type d\'embrayage', 'Suspension Avant', 'Suspension Arrière', 'Suspension', 'Barre Stabilisatrice', 'Châssis'] },
+            { title: 'Dimensions', icon: 'fa-ruler-combined', keys: ['Empattement', 'Longueur hors tout', 'Largeur hors tout', 'Largeur', 'Hauteur', 'Largeur hors-tout', 'Rayon de braquage', 'Longueur Carrossable', 'Dimensions (Lxl)', 'Dimensions (LxlxH)', 'Dimensions', 'Garde au sol'] },
+            { title: 'Pneumatiques & Freinage', icon: 'fa-dot-circle', keys: ['Pneumatiques', 'Pneumatiques standards', 'Type de pneumatique', 'Dimension Pneus', 'Pneus (AV/AR)', 'Pneus', 'Freinage', 'Freins', 'Commande de freins', 'ABS', 'ESP', 'Sécurité'] },
+            { title: 'Capacités de Manutention & Travail', icon: 'fa-pallet', keys: ['Capacité de levage', 'Capacité', 'Mât', 'Hauteur de levée', 'Hauteur de levée max', 'Levée libre', 'Accessoires', 'Longueur des fourches', 'Vitesse de levage', 'Vitesse levage (chargé)', 'Pente max (chargé/vide)', 'Levage', 'Hauteur de levage (à l\'axe d\'articulation)', 'Godet Standard (Chargeur)', 'Capacité de levage (Chargeur)', 'Hauteur de déversement (Chargeur)', 'Profondeur de creusée (Rétrocaveuse)', 'Force d\'arrachement (Rétrocaveuse)', 'Force d\'arrachement (Godet rétro)'] },
+            { title: 'Hydraulique & Prise de Force', icon: 'fa-water', keys: ['Hydraulique', 'Hydraulique (Débit standard)', 'Prise de Force (PTO)'] },
+            { title: 'Équipements & Divers', icon: 'fa-star', keys: ['Direction', 'Réservoir', 'Equipements', 'Intérieur', 'Extérieur', 'Cabine', 'Batterie', 'Électricité', 'Améliorations'] },
+        ];
+
+        window.showTechSheet = (vehicleId) => {
+            const baseData = vehicleDatabase[vehicleId];
+            const detailData = detailedVehicleData[baseData.name] || {
+                name: baseData.name,
+                description: "Les informations détaillées pour ce véhicule seront bientôt disponibles.",
+                specs: {}
+            };
+
+            let specsHtml = '';
+            if (Object.keys(detailData.specs).length > 0) {
+                specsHtml += '<div class="space-y-12 mt-12">';
+                specGroups.forEach(group => {
+                    const groupItems = [];
+                    group.keys.forEach(key => {
+                        if (detailData.specs[key]) {
+                            groupItems.push(`
+                                <div class="spec-grid-item">
+                                    <p class="text-sm text-gray-500">${key}</p>
+                                    <p class="text-lg font-semibold text-blue-primary">${detailData.specs[key]}</p>
+                                </div>
+                            `);
+                        }
+                    });
+
+                    if (groupItems.length > 0) {
+                        specsHtml += `
+                            <div>
+                                <h4 class="text-3xl font-teko font-semibold mb-6 text-blue-primary"><i class="fas ${group.icon} fa-fw mr-3 text-red-accent"></i>${group.title}</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    ${groupItems.join('')}
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+                specsHtml += '</div>';
+            }
+
+            const hasConfig = !!configuratorData[vehicleId];
+            const actionButtonHtml = `
+                <div class="space-y-4">
+                    ${hasConfig ? `<button class="btn btn-primary w-full text-lg btn-configurator" data-vehicle-id="${vehicleId}"><i class="fas fa-cogs"></i>Configurer ce modèle</button>` : ''}
+                    <button class="btn btn-red w-full text-lg" onclick="document.getElementById('chatbot-fab').click()"><i class="fas fa-comments"></i>Contacter un conseiller</button>
+                </div>
+            `;
+
+            techSheetView.innerHTML = `
+                <div class="bg-gray-50 min-h-screen">
+                    <div class="container mx-auto px-4 sm:px-6 py-12">
+                        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+                            <div class="relative">
+                                <img src="${baseData.image}" alt="${baseData.name}" class="w-full h-64 lg:h-96 object-cover cursor-zoom-in" id="tech-sheet-main-image" onerror="this.onerror=null;this.src='https://placehold.co/1200x800/eeeeee/1F2937?text=Image+Indisponible';">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div>
+                                <div class="absolute top-4 right-4">
+                                    <button onclick="showCatalogue()" class="btn bg-white/20 text-white backdrop-blur-sm hover:bg-white/30">
+                                        <i class="fas fa-arrow-left"></i>Retour au catalogue
+                                    </button>
+                                </div>
+                                <div class="absolute bottom-0 left-0 p-6 md:p-8">
+                                    <h1 class="text-5xl lg:text-7xl font-teko font-bold text-white" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">${detailData.name}</h1>
+                                </div>
+                            </div>
+
+                            <div class="p-6 md:p-10">
+                                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+                                    <div class="lg:col-span-2">
+                                        <h2 class="text-4xl font-teko text-blue-primary mb-4">Description</h2>
+                                        <div class="prose max-w-none text-gray-700 leading-relaxed">${detailData.description}</div>
+                                    </div>
+                                    <div class="bg-gray-50 p-6 rounded-lg self-start">
+                                        <h3 class="text-2xl font-teko text-blue-primary mb-4">Actions Rapides</h3>
+                                        ${actionButtonHtml}
+                                    </div>
+                                </div>
+                                ${specsHtml}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            catalogueView.classList.add('view-hidden');
+            techSheetView.classList.remove('view-hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            const configuratorBtn = techSheetView.querySelector('.btn-configurator');
+            if (configuratorBtn) {
+                configuratorBtn.addEventListener('click', (e) => openConfiguratorModal(e.currentTarget.dataset.vehicleId));
+            }
+
+            const imageContainer = document.getElementById('tech-sheet-main-image');
+            if (imageContainer) {
+                imageContainer.addEventListener('click', () => openZoomModal(imageContainer.src));
+            }
+        };
+
+        window.showCatalogue = () => {
+            techSheetView.classList.add('view-hidden');
+            catalogueView.classList.remove('view-hidden');
+            techSheetView.innerHTML = '';
+            // Scroll back to the last position
+            requestAnimationFrame(() => {
+                window.scrollTo({ top: lastScrollPosition, behavior: 'auto' });
+            });
+        };
+
+        document.querySelectorAll('.product-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                if (e.target.closest('button')) return;
+                lastScrollPosition = window.scrollY; // Store scroll position
+                showTechSheet(card.dataset.vehicleId);
+            });
+        });
+
+        const openZoomModal = (imageSrc) => {
+             zoomedImage.src = imageSrc;
+             zoomModal.classList.remove('hidden');
+        };
+
+        const closeZoomModal = () => {
+             zoomModal.classList.add('hidden');
+             zoomedImage.src = "";
+        };
+        closeZoomModalBtn.addEventListener('click', closeZoomModal);
+        zoomModal.addEventListener('click', (e) => {
+            if (e.target === zoomModal) closeZoomModal();
+        });
+
+        const configuratorOptionsEl = document.getElementById('configurator-options');
+        const configVehicleNameEl = document.getElementById('configurator-vehicle-name');
+        const configVehicleImageEl = document.getElementById('configurator-vehicle-image');
+        const configOptionsSummaryEl = document.getElementById('config-options-summary');
+        const closeAndContactBtn = document.getElementById('configurator-close-and-contact');
+
+        window.openConfiguratorModal = (vehicleId) => {
+            const vehicle = vehicleDatabase[vehicleId];
+            const configData = configuratorData[vehicleId];
+            
+            if (!vehicle || !configData) {
+                console.error("Configurateur non disponible pour :", vehicleId);
+                return;
+            }
+
+            configVehicleNameEl.textContent = vehicle.name;
+            configVehicleImageEl.src = vehicle.image;
+
+            configuratorOptionsEl.innerHTML = '';
+            configData.options.forEach(group => {
+                const fieldset = document.createElement('fieldset');
+                fieldset.className = 'config-option-group';
+                fieldset.innerHTML = `<legend>${group.name}</legend>`;
+                group.choices.forEach(choice => {
+                    const label = document.createElement('label');
+                    label.className = 'config-choice';
+                    label.innerHTML = `
+                        <input type="${group.type}" name="${group.id}" value="${choice.id}" data-name="${choice.name}" ${group.default === choice.id ? 'checked' : ''}>
+                        <span>${choice.name}</span>
+                        <span class="price-tag"></span>`;
+                    fieldset.appendChild(label);
+                });
+                configuratorOptionsEl.appendChild(fieldset);
+            });
+
+            configuratorOptionsEl.querySelectorAll('input').forEach(input => {
+                input.addEventListener('change', updateConfiguratorSummary);
+            });
+
+            updateConfiguratorSummary();
+
+            configuratorModal.classList.remove('hidden');
+            setTimeout(() => {
+                configuratorModal.querySelector('.modal-content').classList.add('scale-100', 'opacity-100');
+                configuratorModal.querySelector('.modal-content').classList.remove('scale-95', 'opacity-0');
+            }, 10);
+        };
+
+        function updateConfiguratorSummary() {
+            let summaryHtml = '';
+            configuratorOptionsEl.querySelectorAll('input:checked').forEach(input => {
+                summaryHtml += `<div class="flex justify-between"><span>${input.dataset.name}</span></div>`;
+            });
+            configOptionsSummaryEl.innerHTML = summaryHtml || '<p class="text-gray-500">Aucune option.</p>';
+        }
+
+        const closeConfiguratorModal = () => {
+             configuratorModal.querySelector('.modal-content').classList.add('scale-95', 'opacity-0');
+             setTimeout(() => configuratorModal.classList.add('hidden'), 300);
+        };
+        closeConfiguratorModalBtn.addEventListener('click', closeConfiguratorModal);
+        configuratorModal.addEventListener('click', e => {
+            if (e.target === configuratorModal) closeConfiguratorModal();
+        });
+
+        closeAndContactBtn.addEventListener('click', () => {
+            closeConfiguratorModal();
+            setTimeout(() => {
+                const chatbotFab = document.getElementById('chatbot-fab');
+                if (document.getElementById('chatbot-window').classList.contains('hidden')) {
+                    chatbotFab.click();
+                }
+            }, 350);
+        });
+        
+        // =======================================================================
+        // =================== NOUVELLE LOGIQUE DU CHATBOT V2 ====================
+        // =======================================================================
+
+        const chatbotFab = document.getElementById('chatbot-fab');
+        const chatbotWindow = document.getElementById('chatbot-window');
+        const closeChatbotBtn = document.getElementById('close-chatbot');
+        const chatbotMessages = document.getElementById('chatbot-messages');
+        const chatbotInput = document.getElementById('chatbot-input');
+        const chatbotSendBtn = document.getElementById('chatbot-send');
+
+        const toggleChatbot = () => chatbotWindow.classList.toggle('hidden');
+        chatbotFab.addEventListener('click', toggleChatbot);
+        closeChatbotBtn.addEventListener('click', toggleChatbot);
+        
+        const addMessage = (message, sender) => {
+            const messageContainer = document.createElement('div');
+            messageContainer.className = `chat-message ${sender}-message`;
+            const messageBubble = document.createElement('p');
+            messageBubble.innerHTML = message; // Use innerHTML to allow links and buttons
+            messageContainer.appendChild(messageBubble);
+            chatbotMessages.appendChild(messageContainer);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        };
+
+        window.showTechSheetFromChat = (vehicleId) => {
+            if (document.getElementById('catalogue-view').classList.contains('view-hidden')) {
+                lastScrollPosition = 0; // Reset if we are already on a tech sheet
+            } else {
+                lastScrollPosition = window.scrollY;
+            }
+            showTechSheet(vehicleId);
+            toggleChatbot(); // Hide chatbot window
+        }
+
+        const chatbotKnowledge = [
+            // Salutations et Politesse
+            { keywords: ['bonjour', 'salut', 'hello', 'salam'], response: "Bonjour ! Je suis l'assistant virtuel de HPA Monastir. Comment puis-je vous aider aujourd'hui ?" },
+            { keywords: ['merci', 'remercie'], response: "De rien ! N'hésitez pas si vous avez d'autres questions." },
+            { keywords: ['au revoir', 'bye', 'à plus'], response: "Au revoir ! Passez une excellente journée." },
+            { keywords: ['ça va'], response: "Je vais très bien, merci ! Je suis prêt à répondre à vos questions sur nos véhicules et services." },
+            
+            // Contact et Informations Générales
+            { keywords: ['contact', 'contacter', 'joindre', 'appeler'], response: "Vous pouvez nous contacter par téléphone au <strong>+216 73 500 000</strong> ou par email à <strong>contact@hpa-monastir.com</strong>." },
+            { keywords: ['adresse', 'où êtes-vous', 'localis', 'emplacement'], response: "Notre concession est située à l'adresse : <strong>Route de Sousse Km 6, 5000 Monastir</strong>." },
+            { keywords: ['horaires', 'ouvert', 'fermé'], response: "Nos horaires d'ouverture sont du Lundi au Vendredi, de 8h00 à 18h00, et le Samedi de 8h30 à 13h00." },
+            { keywords: ['qui êtes-vous', 'hpa'], response: "Nous sommes HPA Monastir, votre concessionnaire et partenaire de confiance pour les marques IVECO, New Holland et HELI en Tunisie." },
+
+            // Marques et Types de véhicules
+            { keywords: ['marques', 'vendez quoi'], response: "Nous sommes le concessionnaire officiel des marques <strong>IVECO</strong> (véhicules utilitaires et poids lourds), <strong>New Holland</strong> (équipements agricoles et de construction) et <strong>HELI</strong> (chariots élévateurs)." },
+            { keywords: ['iveco'], response: "IVECO propose une large gamme de véhicules, du Daily (utilitaire) à l'Eurocargo (porteur) et au Stralis (tracteur routier). Que cherchez-vous précisément ?" },
+            { keywords: ['new holland', 'holland'], response: "New Holland est leader en équipements agricoles (tracteurs) et de construction (tractopelles, mini-chargeuses). Avez-vous un besoin agricole ou pour un chantier ?" },
+            { keywords: ['heli'], response: "HELI est spécialisé dans les solutions de manutention, comme les chariots élévateurs (Fenwick) et les transpalettes. Quelle capacité de levage vous intéresse ?" },
+            
+            // Services
+            { keywords: ['sav', 'après-vente', 'entretien', 'reparation', 'pièces'], response: "Notre service après-vente (SAV) est à votre disposition pour l'entretien, la réparation et la fourniture de pièces de rechange d'origine pour toutes nos marques. Vous pouvez visiter notre page SAV pour plus de détails." },
+            { keywords: ['financement', 'leasing', 'crédit'], response: "Oui, nous proposons des solutions de financement sur mesure, comme le leasing ou le crédit, pour vous aider à acquérir votre équipement. Nos conseillers commerciaux sont là pour étudier la meilleure option avec vous." },
+            { keywords: ['garantie'], response: "Tous nos véhicules neufs bénéficient de la garantie constructeur. La durée et les conditions varient selon le modèle. Un conseiller pourra vous donner tous les détails." },
+            { keywords: ['personnalisation', 'carrosserie', 'adaptation'], response: "Absolument. Nous pouvons adapter votre véhicule à vos besoins : montage de bennes, de fourgons, de plateaux ou d'autres équipements spécifiques. Parlez-nous de votre projet !" },
+            { keywords: ['devis', 'cotation', 'offre'], response: "Pour obtenir un devis, le mieux est de contacter directement un de nos conseillers commerciaux. Ils pourront vous faire une offre personnalisée en fonction de la configuration exacte que vous souhaitez." },
+
+            // Prix
+            { keywords: ['prix', 'tarif', 'coût', 'cher', 'combien'], response: "Les prix de nos véhicules varient en fonction des modèles, des options et des carrosseries choisies. Pour une offre de prix précise, je vous invite à contacter notre service commercial au <strong>+216 73 500 000</strong>." },
+
+            // Questions techniques spécifiques et reconnaissance de véhicule (dynamique)
+            { 
+                keywords: ['puissance', 'chevaux', 'cv', 'moteur', 'cylindrée', 'capacité', 'poids', 'ptac', 'dimension', 'longueur', 'largeur', 'hauteur', 'levage', 'daily', 'eurocargo', 'stralis', 'heli', 'tracteur', 'tractopelle', 'b90', 'b80', 'tt75', 'cpcd30', 'transpalette', 'l313'],
+                isDynamic: true,
+                handler: (input) => {
+                    const vehicleInfo = findVehicleInText(input);
+                    if (!vehicleInfo) return null;
+
+                    const { id: vehicleId, data: vehicle } = vehicleInfo;
+
+                    const specKeywords = {
+                        'puissance': ['Puissance', 'Puissance Maximale', 'Puissance max', 'Puissance moteur'], 'chevaux': ['Puissance', 'Puissance Maximale', 'Puissance max', 'Puissance moteur'], 'cv': ['Puissance', 'Puissance Maximale', 'Puissance max', 'Puissance moteur'],
+                        'moteur': ['Moteur', 'Moteur Type'], 'cylindrée': ['Cylindrée'],
+                        'capacité': ['Capacité de levage', 'Capacité', 'Capacité de charge nominale', 'Réservoir', 'Volume'],
+                        'poids': ['Poids à vide', 'Poids opérationnel', 'Poids'], 'ptac': ['PTAC', 'Poids total autorisé en charge (PTAC)', 'PTAC / PTRA'],
+                        'dimension': ['Dimensions (LxlxH)', 'Dimensions (Lxl)', 'Dimensions'], 'longueur': ['Longueur hors tout', 'Longueur Carrossable'], 'largeur': ['Largeur hors tout', 'Largeur'],
+                        'hauteur': ['Hauteur', 'Hauteur de levée', 'Hauteur de levée max'], 'levage': ['Capacité de levage', 'Hauteur de levée']
+                    };
+
+                    let foundSpec = false;
+                    for (const keyword in specKeywords) {
+                        if (input.includes(keyword)) {
+                            for (const specKey of specKeywords[keyword]) {
+                                if (vehicle.specs[specKey]) {
+                                    foundSpec = true;
+                                    return `La caractéristique '<strong>${specKey}</strong>' du <strong>${vehicle.name}</strong> est : <strong>${vehicle.specs[specKey]}</strong>.<br><br><button class="chat-action-btn" onclick="showTechSheetFromChat('${vehicleId}')">Voir la fiche complète</button>`;
+                                }
+                            }
+                        }
+                    }
+
+                    // Si un véhicule est détecté mais aucune spec, proposer la fiche
+                    return `Je vois que vous parlez du <strong>${vehicle.name}</strong>. Je peux vous donner ses caractéristiques (puissance, dimensions, etc.) ou vous pouvez consulter sa fiche technique.<br><br><button class="chat-action-btn" onclick="showTechSheetFromChat('${vehicleId}')">Ouvrir la fiche technique</button>`;
+                }
+            },
+            
+            // Fallback (doit être le dernier)
+            { keywords: [], response: "Je ne suis pas certain d'avoir compris votre question. Pouvez-vous la reformuler ? Pour toute demande complexe, vous pouvez nous appeler au <strong>+216 73 500 000</strong>." }
+        ];
+
+        function findVehicleInText(text) {
+            const upperText = text.toUpperCase();
+            // Prioriser la recherche par ID pour plus de précision (ex: "B80C")
+            for (const id in vehicleDatabase) {
+                 const vehicleIdSimple = id.replace(/-/g, ' ').replace('CONST','').replace('AGRI','').trim().toUpperCase();
+                 if (upperText.includes(vehicleIdSimple) && vehicleIdSimple.length > 3) {
+                     const vehicle = vehicleDatabase[id];
+                     return { id: id, data: detailedVehicleData[vehicle.name] };
+                 }
+            }
+             // Ensuite, rechercher par nom
+            for (const id in vehicleDatabase) {
+                const vehicle = vehicleDatabase[id];
+                const vehicleName = vehicle.name.toUpperCase();
+                if (upperText.includes(vehicleName)) {
+                    return { id: id, data: detailedVehicleData[vehicle.name] };
+                }
+            }
+            return null;
+        }
+
+        const handleUserInput = () => {
+            const userInput = chatbotInput.value.trim();
+            if (userInput === '') return;
+            addMessage(userInput, 'user');
+            chatbotInput.value = '';
+
+            setTimeout(() => {
+                const lowerInput = userInput.toLowerCase();
+                let botResponse = null;
+
+                for (const rule of chatbotKnowledge) {
+                    if (rule.isDynamic) {
+                        // Chercher d'abord les mots-clés dynamiques
+                        if (rule.keywords.some(k => lowerInput.includes(k))) {
+                            const dynamicResponse = rule.handler(lowerInput);
+                            if (dynamicResponse) {
+                                botResponse = dynamicResponse;
+                                break;
+                            }
+                        }
+                    } else {
+                        if (rule.keywords.some(k => lowerInput.includes(k))) {
+                            botResponse = rule.response;
+                            break;
+                        }
+                    }
+                }
+                
+                if (!botResponse) {
+                    botResponse = chatbotKnowledge[chatbotKnowledge.length - 1].response;
+                }
+
+                addMessage(botResponse, 'bot');
+            }, 600);
+        };
+        
+        chatbotSendBtn.addEventListener('click', handleUserInput);
+        chatbotInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleUserInput();
+        });
+        
+        addMessage("Bonjour ! Je suis l'assistant virtuel de HPA Monastir. Comment puis-je vous aider ?", 'bot');
+
+    });
+    </script>
+</body>
+</html>
